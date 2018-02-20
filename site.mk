@@ -1,28 +1,23 @@
+GLUON_FEATURES := \
+    autoupdater \
+    ebtables-filter-multicast \
+    ebtables-filter-ra-dhcp \
+    mesh-batman-adv-15 \
+    mesh-vpn-fastd \
+    radvd \
+    respondd \
+    status-page \
+    web-advanced \
+    web-wizard
+
 GLUON_SITE_PACKAGES := \
-    gluon-mesh-batman-adv-15 \
-    gluon-respondd \
-    gluon-autoupdater \
     gluon-config-mode-core \
-    gluon-config-mode-hostname \
-    gluon-config-mode-autoupdater \
-    gluon-config-mode-mesh-vpn \
-    gluon-config-mode-geo-location \
-    gluon-config-mode-contact-info \
-    gluon-ebtables-filter-multicast \
-    gluon-ebtables-filter-ra-dhcp \
-    gluon-web-admin \
-    gluon-web-network \
-    gluon-web-autoupdater \
     gluon-web-private-wifi \
-    gluon-web-wifi-config \
-    gluon-mesh-vpn-fastd \
-    gluon-web-mesh-vpn-fastd \
-    gluon-radvd \
-    gluon-radvd-filterd \
     gluon-setup-mode \
-    gluon-status-page \
     iwinfo \
-    haveged \
+    haveged
+
+GLUON_MULTIDOMAIN=1
 
 # add offline ssid only if the target has wifi device
 ifeq ($(GLUON_TARGET),ar71xx-generic)
