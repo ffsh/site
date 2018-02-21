@@ -11,11 +11,10 @@ GLUON_FEATURES := \
     web-wizard
 
 GLUON_SITE_PACKAGES := \
-    gluon-config-mode-core \
     gluon-web-private-wifi \
-    gluon-setup-mode \
     iwinfo \
-    haveged
+    haveged \
+    gluon-config-mode-domain-select
 
 GLUON_MULTIDOMAIN=1
 
