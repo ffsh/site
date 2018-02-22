@@ -12,7 +12,7 @@ msgstr ""
 
 msgid "gluon-config-mode:welcome"
 msgstr ""
-"Willkommen zum Einrichtungsassistenten für deinen neuen Alpha Centauri "
+"Willkommen zum Einrichtungsassistenten für deinen neuen Südholstein "
 "Freifunk-Knoten. Fülle das folgende Formular deinen Vorstellungen "
 "entsprechend aus und sende es ab."
 
