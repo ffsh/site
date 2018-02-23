@@ -1,4 +1,5 @@
-#GLUON_SITE_FEEDS="ssidchanger"
-#PACKAGES_SSIDCHANGER_REPO=https://github.com/ffod/gluon-ssid-changer.git
-#PACKAGES_SSIDCHANGER_COMMIT=f227f07254356307f8e0b7798ccaf1bf9f7ef88a
-#PACKAGES_SSIDCHANGER_BRANCH=lede
+
+GLUON_SITE_FEEDS="ssidchanger"
+PACKAGES_SSIDCHANGER_REPO=https://github.com/ffsh/gluon-ssid-changer.git
+PACKAGES_SSIDCHANGER_COMMIT=bea7c5bddb0e780a8f3f524cab3e875cbde00a7a
+PACKAGES_SSIDCHANGER_BRANCH=master

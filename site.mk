@@ -5,73 +5,90 @@ GLUON_FEATURES := \
     mesh-batman-adv-15 \
     mesh-vpn-fastd \
     radvd \
+    radv-filterd \
     respondd \
     status-page \
     web-advanced \
-    web-wizard
+    web-wizard \
+    web-private-wifi \
+    config-mode-domain-select
 
 GLUON_SITE_PACKAGES := \
-    gluon-web-private-wifi \
     iwinfo \
-    haveged \
-    gluon-config-mode-domain-select
+    haveged
 
 GLUON_MULTIDOMAIN=1
 
-# add addition network drivers and usb stuff only to targes where disk space does not matter.
-ifeq ($(GLUON_TARGET),x86-generic)
+ifeq ($(GLUON_TARGET),ar71xx-generic)
 GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
-        kmod-usb-ohci-pci \
-        kmod-usb2 \
-        kmod-usb-hid \
-        kmod-usb-net \
-        kmod-usb-net-asix \
-        kmod-usb-net-dm9601-ether
+    gluon-ssid-changer
 endif
 
-ifeq ($(GLUON_TARGET),x86-64)
+ifeq ($(GLUON_TARGET),ar71xx-tiny)
 GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
-        kmod-usb-ohci-pci \
-        kmod-usb2 \
-        kmod-usb-hid \
-        kmod-usb-net \
-        kmod-usb-net-asix \
-        kmod-usb-net-dm9601-ether
+    gluon-ssid-changer
 endif
+
+ifeq ($(GLUON_TARGET),ar71xx-nand)
+GLUON_SITE_PACKAGES += \
+    gluon-ssid-changer
+endif
+
+
+# add addition network drivers and usb stuff only to targes where disk space does not matter.
+#ifeq ($(GLUON_TARGET),x86-generic)
+#GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb-ohci-pci \
+    kmod-usb2 \
+    kmod-usb-hid \
+    kmod-usb-net \
+    kmod-usb-net-asix \
+    kmod-usb-net-dm9601-ether
+#endif
+
+#ifeq ($(GLUON_TARGET),x86-64)
+#GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb-ohci-pci \
+    kmod-usb2 \
+    kmod-usb-hid \
+    kmod-usb-net \
+    kmod-usb-net-asix \
+    kmod-usb-net-dm9601-ether
+#endif
 
 # Add offline ssid, network drivers and usb stuff to raspberry and banana pi images
 
-ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
-GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
-        kmod-usb2 \
-        kmod-usb-hid \
-        kmod-usb-net \
-        kmod-usb-net-asix \
-        kmod-usb-net-dm9601-ether
-endif
+#ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
+#GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid \
+    kmod-usb-net \
+    kmod-usb-net-asix \
+    kmod-usb-net-dm9601-ether
+#endif
 
-ifeq ($(GLUON_TARGET),brcm2708-bcm2709)
-GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
-        kmod-usb2 \
-        kmod-usb-hid \
-        kmod-usb-net \
-        kmod-usb-net-asix \
-        kmod-usb-net-dm9601-ether
-endif
+#ifeq ($(GLUON_TARGET),brcm2708-bcm2709)
+#GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid \
+    kmod-usb-net \
+    kmod-usb-net-asix \
+    kmod-usb-net-dm9601-ether
+#endif
 
-ifeq ($(GLUON_TARGET),sunxi)
-GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
-        kmod-usb2 \
-        kmod-usb-hid \
-        kmod-usb-net \
-        kmod-usb-net-asix \
-        kmod-usb-net-dm9601-ether
-endif
+#ifeq ($(GLUON_TARGET),sunxi)
+#GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid \
+    kmod-usb-net \
+    kmod-usb-net-asix \
+    kmod-usb-net-dm9601-ether
+#endif
 
 DEFAULT_GLUON_RELEASE := 2018.1+t$(shell date '+%Y%m%d')
 
