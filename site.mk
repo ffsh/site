@@ -36,8 +36,8 @@ endif
 
 
 # add addition network drivers and usb stuff only to targes where disk space does not matter.
-#ifeq ($(GLUON_TARGET),x86-generic)
-#GLUON_SITE_PACKAGES += \
+ifeq ($(GLUON_TARGET),x86-generic)
+GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb-ohci-pci \
     kmod-usb2 \
@@ -45,10 +45,10 @@ endif
     kmod-usb-net \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
-#endif
+endif
 
 #ifeq ($(GLUON_TARGET),x86-64)
-#GLUON_SITE_PACKAGES += \
+GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb-ohci-pci \
     kmod-usb2 \
@@ -56,39 +56,39 @@ endif
     kmod-usb-net \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
-#endif
+endif
 
 # Add offline ssid, network drivers and usb stuff to raspberry and banana pi images
 
-#ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
-#GLUON_SITE_PACKAGES += \
+ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
+GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb2 \
     kmod-usb-hid \
     kmod-usb-net \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
-#endif
+endif
 
-#ifeq ($(GLUON_TARGET),brcm2708-bcm2709)
-#GLUON_SITE_PACKAGES += \
+ifeq ($(GLUON_TARGET),brcm2708-bcm2709)
+GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb2 \
     kmod-usb-hid \
     kmod-usb-net \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
-#endif
+endif
 
-#ifeq ($(GLUON_TARGET),sunxi)
-#GLUON_SITE_PACKAGES += \
+ifeq ($(GLUON_TARGET),sunxi)
+GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb2 \
     kmod-usb-hid \
     kmod-usb-net \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
-#endif
+endif
 
 DEFAULT_GLUON_RELEASE := 2018.1+t$(shell date '+%Y%m%d')
 
