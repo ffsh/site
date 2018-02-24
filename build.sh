@@ -11,7 +11,7 @@
 # ======================================================================
 
 # Default make options
-MAKEOPTS="V=s -j 32"
+MAKEOPTS="V=s -j 1"
 
 # Default to build all Gluon targets if parameter -t is not set
 TARGETS="ar71xx-generic ar71xx-tiny ar71xx-nand ar71xx-mikrotik mpc85xx-generic x86-generic x86-64"
