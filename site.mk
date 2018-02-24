@@ -47,7 +47,7 @@ GLUON_SITE_PACKAGES += \
     kmod-usb-net-dm9601-ether
 endif
 
-#ifeq ($(GLUON_TARGET),x86-64)
+ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb-ohci-pci \
