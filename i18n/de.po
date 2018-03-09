@@ -21,8 +21,9 @@ msgstr "Domäne"
 
 msgid "gluon-config-mode:domain-select"
 msgstr ""
-"Hier hast du die Möglichkeit, die Mesh-Domäne, in der sich dein Knoten "
-"befindet, auszuwählen. Dies bestimmt die SSID (den Sichtbaren Namen) des WLANs."
+"Hier hast du die Möglichkeit, die SSID die dein Knoten anzeigen soll "
+"auszuwählen. Dies bestimmt den Sichtbaren Namen des WLANs. "
+"Unsere Empfehlung ist freifunk-suedholstein.de "
 
 msgid "gluon-config-mode:pubkey"
 msgstr ""
