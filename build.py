@@ -8,6 +8,9 @@ Web: https://freifunk-suedholstein.de
 """
 import argparse
 import json
+import os
+import time
+from datetime import datetime
 from subprocess import call
 
 DEFAULTS = {
@@ -34,6 +37,10 @@ PARSER.add_argument("-n", metavar="Build Number", dest="build_number",
                     help="build.py -n ${BUILD_NUMBER}", required=True)
 PARSER.add_argument("-t", metavar="Target", dest="target",
                     help="build.py -t ar71xx-generic | ...", required=False)
+PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
+                    help="build.py -d /var/www/firmware (jenkins needs rw)", required=False)
+PARSER.add_argument("--commit", metavar="Commit", dest="commit",
+                    help="build.py --commit sha", required=True)
 
 ARGS = PARSER.parse_args()
 
@@ -77,7 +84,6 @@ def build():
     """
     try:
         target = str(ARGS.target)
-        print(target+" "+type(target))
         all_targets = False
     except TypeError:
         all_targets = True
@@ -94,6 +100,7 @@ def build():
                   "GLUON_TARGET="+target,
                   "all"])
     else:
+        print("Cleaning target: {}".format(target))
         call(["make", "-C", DEFAULTS['gluon_dir'],
               "GLUON_SITEDIR="+ARGS.workspace,
               "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
@@ -102,6 +109,29 @@ def build():
               "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
               "GLUON_TARGET="+target,
               "all"])
+    print("Generating buid.json")
+    time_stamp_sec = time.time()
+    time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
+    data = {
+        'build_date' : time_stamp,
+        'release' : "{}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+                                      ARGS.build_number),
+        'branch' : ARGS.branch,
+        'commit' : ARGS.commit
+    }
+    with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
+        json.dumps(data, file)
+
+    # Create manifest
+    print("Createing Manifest ...")
+    call(["make", "-C", DEFAULTS['gluon_dir'],
+          "GLUON_SITEDIR="+ARGS.workspace,
+          "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+                                          ARGS.build_number),
+          "GLUON_BRANCH="+ARGS.branch,
+          "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+          "GLUON_TARGET="+target,
+          "manifest"])
 
 def sign():
     """
@@ -113,7 +143,28 @@ def publish():
     """
     Copy the images to a public directory
     """
-    pass
+    try:
+        directory = str(ARGS.directory)
+    except ValueError:
+        raise ValueError("You need to provide a valid path eg. -d /var/www/firmware")
+    if os.path.isdir(directory):
+        # direcotry/BRANCH/build.json
+        if os.path.isdir("{}/{}".format(directory, ARGS.branch)):
+
+            print("Detected old builds move to archive")
+            dir_source = "{}/{}".format(directory, ARGS.branch)
+
+            with open(dir_source+"/build.json") as file:
+                old_build_date = json.load(file)["build_date"]
+            dir_target = "{}/archive/{}-{}".format(directory, ARGS.branch, old_build_date)
+
+            call(["cp", "-r", dir_source, dir_target])
+
+        dir_source = "{}/output/images".format(ARGS.workspace)
+        dir_target = "{}/{}".format(directory, ARGS.branch)
+        call(["cp", "-rL", dir_source, dir_target])
+    else:
+        raise ValueError("{} Path does not exist!".format(directory))
 
 def main():
     """
