@@ -2,6 +2,13 @@
 
 In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gepflegt.
 
+## Branch Struktur
+
+dev ist der aktive entwicklungs branch hier werden neue gluon versionen vor der veröfentlichung getestet. Aktuell wird als gluon branch next verwendet
+testing ist der nächst stabilere branch
+rc basiert auf testing
+stable basiert auf rc und ist der stablie empfohlene branch
+
 ## Neuen Dinge hinzufügen
 
 Wenn du etwas Neues zur Konfiguration hinzufügen willst, wie zum Beispiel einen Schlüssel, dann benutze dafür bitte den Master Branch.
