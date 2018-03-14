@@ -176,14 +176,13 @@ def main():
     """
     Entry function
     """
+    global DEFAULTS
     with open(ARGS.workspace + '/release.json', 'r') as file:
-        global DEFAULTS
         data = json.load(file)
         DEFAULTS['release'] = data['version']
         DEFAULTS['priority'] = data['priority']
 
     if "/" in ARGS.branch:
-        global DEFAULTS
         DEFAULTS['branch'] = ARGS.branch.split("/")[1]
         print("Warning: found \"/\" in branch name, changing to: {}".format(DEFAULTS['branch']))
 
