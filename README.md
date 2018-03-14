@@ -12,20 +12,32 @@ Dann behebe den Fehler in dem entsprechenden Branch, ob die Änderungen in Maste
 
 
 
-## Script Beispiel zum automatischen Erstellen:
+## Firmware selber bauen:
+
+Für das bauen der Firmware haben wir ein pyhton script. Dadurch können wir die firmware automatisch bauen. Es kann jedoch auch
+
+### build.py Argumente:
+
+Optionen für -c (command - Befehl):
+- build.py -c update ruft make update auf.
+    - Muss vor dem bauen ausgeführt werden, aktuallisiert die Abhängigkeiten
+- build.py -c build ruft make all auf.
+    - Baut die Firmware und erstellt ein manfiest
+- build.py -c clean ruft make clean auf.
+    - Löscht daten des targets also pakete etc. sollte man nur im Fehlerfall nutzen
+- build.py -c sign ruft das sign script auf.
+    - Signiert das manifest
+- build.py -c publish
+    - kopiert die images an einen beliebigen anderen ort (wichtig für jenkins)
+Weitere Optionen:
+- -b branch, der aktuelle Branch (Pflicht)
+- -n Build nummer (jenkins führt diese Nummer, ist beliebig) (Pflicht)
+- -w Workspace, das site Verzeichnis
+- --commit, der aktuelle commit
+
+
+
 ```
-#!/bin/bash
-start=$(date +%s)
-CORES=$(expr $(nproc) + 1)
-RELEASE=2018.1+t$(date +"%Y%m%d")
-BRANCH=testing
-make update GLUON_RELEASE=$RELEASE
-for TARGET in ar71xx-generic ar71xx-tiny ar71xx-nand brcm2708-bcm2708 brcm2708-bcm2709 mpc85xx-generic ramips-mt7621 sunxi-cortexa7 x86-generic x86-geode x86-64 ramips-mt7620 ramips-mt76x8 ramips-rt305x; do
-        echo "################# $(date) start building target $TARGET #################"
-        make -j$CORES GLUON_TARGET=$TARGET GLUON_RELEASE=$RELEASE GLUON_BRANCH=$BRANCH || exit 1
-done
-make manifest GLUON_BRANCH=$BRANCH GLUON_RELEASE=$RELEASE
-echo "alle Targets wurden erfolgreich erstellt"
-echo -n "finished: "; date
-echo "Dauer: $((($(date +%s)-start)/60)) Minuten"
+./build.py -c update -b dev -n 42 -w $(pwd) --commit $(git rev-parse HEAD)
+./build.py -c build -t "ar71xx-tiny" -b dev -n 42 -w $(pwd) --commit $(git rev-parse HEAD)
 ```

@@ -120,10 +120,15 @@ def build():
         'commit' : ARGS.commit
     }
     with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
-        json.dumps(data, file)
+        json.dump(data, file)
 
     # Create manifest
     print("Createing Manifest ...")
+
+    if not os.path.isdir("{}/tmp/origin/".format(ARGS.workspace)):
+        # Make sure that the tmp dir exists
+        call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
+
     call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
           "GLUON_SITEDIR="+ARGS.workspace,
           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
