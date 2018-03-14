@@ -23,7 +23,8 @@ DEFAULTS = {
     'gluon_dir': '/gluon',
     'makeopts' : 'V=s -j$(expr $(nproc) + 1)',
     'release': '2018.1',
-    'priority': 1
+    'priority': 1,
+    'branch': 'dev'
 }
 
 PARSER = argparse.ArgumentParser()
@@ -93,9 +94,9 @@ def build():
             print("Cleaning target: {}".format(target))
             call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                   "GLUON_SITEDIR="+ARGS.workspace,
-                  "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+                  "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                   ARGS.build_number),
-                  "GLUON_BRANCH="+ARGS.branch,
+                  "GLUON_BRANCH="+DEFAULTS['branch'],
                   "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
                   "GLUON_TARGET="+target,
                   "all"])
@@ -103,9 +104,9 @@ def build():
         print("Cleaning target: {}".format(target))
         call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
               "GLUON_SITEDIR="+ARGS.workspace,
-              "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+              "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                               ARGS.build_number),
-              "GLUON_BRANCH="+ARGS.branch,
+              "GLUON_BRANCH="+DEFAULTS['branch'],
               "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
               "GLUON_TARGET="+target,
               "all"])
@@ -114,9 +115,9 @@ def build():
     time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
     data = {
         'build_date' : time_stamp,
-        'release' : "{}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+        'release' : "{}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                       ARGS.build_number),
-        'branch' : ARGS.branch,
+        'branch' : DEFAULTS['branch'],
         'commit' : ARGS.commit
     }
     with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
@@ -131,9 +132,9 @@ def build():
 
     call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
           "GLUON_SITEDIR="+ARGS.workspace,
-          "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
+          "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                           ARGS.build_number),
-          "GLUON_BRANCH="+ARGS.branch,
+          "GLUON_BRANCH="+DEFAULTS['branch'],
           "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
           "GLUON_TARGET="+target,
           "manifest"])
@@ -154,19 +155,19 @@ def publish():
         raise ValueError("You need to provide a valid path eg. -d /var/www/firmware")
     if os.path.isdir(directory):
         # direcotry/BRANCH/build.json
-        if os.path.isdir("{}/{}".format(directory, ARGS.branch)):
+        if os.path.isdir("{}/{}".format(directory, DEFAULTS['branch'])):
 
             print("Detected old builds move to archive")
-            dir_source = "{}/{}".format(directory, ARGS.branch)
+            dir_source = "{}/{}".format(directory, DEFAULTS['branch'])
 
             with open(dir_source+"/build.json") as file:
                 old_build_date = json.load(file)["build_date"]
-            dir_target = "{}/archive/{}-{}".format(directory, ARGS.branch, old_build_date)
+            dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
 
             call(["cp", "-r", dir_source, dir_target])
 
         dir_source = "{}/output/images".format(ARGS.workspace)
-        dir_target = "{}/{}".format(directory, ARGS.branch)
+        dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
         call(["cp", "-rL", dir_source, dir_target])
     else:
         raise ValueError("{} Path does not exist!".format(directory))
@@ -182,9 +183,10 @@ def main():
         DEFAULTS['priority'] = data['priority']
 
     if "/" in ARGS.branch:
-        global ARGS
-        ARGS.branch = ARGS.branch.split("/")[1]
-        print("Warning: found \"/\" in branch name, changing to: {}".format(ARGS.branch))
+        global DEFAULTS
+        DEFAULTS['branch'] = ARGS.branch.split("/")[1]
+        print("Warning: found \"/\" in branch name, changing to: {}".format(DEFAULTS['branch']))
+
     if ARGS.command == "clean":
         clean()
     elif ARGS.command == "update":

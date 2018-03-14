@@ -29,11 +29,12 @@ Optionen für -c (command - Befehl):
     - Signiert das manifest
 - build.py -c publish
     - kopiert die images an einen beliebigen anderen ort (wichtig für jenkins)
+
 Weitere Optionen:
 - -b branch, der aktuelle Branch (Pflicht)
 - -n Build nummer (jenkins führt diese Nummer, ist beliebig) (Pflicht)
-- -w Workspace, das site Verzeichnis
-- --commit, der aktuelle commit
+- -w Workspace, das site Verzeichnis (Pflicht)
+- --commit, der aktuelle commit (Pflicht)
 
 
 
