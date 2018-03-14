@@ -73,7 +73,7 @@ def update():
     """
     Updates the repository
     """
-    call(["make", "-C", DEFAULTS['gluon_dir'],
+    call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
           "GLUON_SITEDIR="+ARGS.workspace,
           "update"])
 
