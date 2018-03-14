@@ -20,7 +20,7 @@ DEFAULTS = {
                  'sunxi-cortexa7', 'x86-generic',
                  'x86-geode', 'x86-64 ramips-mt7620',
                  'ramips-mt76x8', 'ramips-rt305x'],
-    'gluon_dir': '/home/grotax/git/site-ffsh/gluon',
+    'gluon_dir': '/gluon',
     'makeopts' : 'V=s -j$(expr $(nproc) + 1)',
     'release': '2018.1',
     'priority': 1
@@ -59,12 +59,12 @@ def clean():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Cleaning target: {}".format(target))
-            call(["make", "-C", DEFAULTS['gluon_dir'],
+            call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                   "GLUON_SITEDIR="+ARGS.workspace,
                   "GLUON_TARGET="+target,
                   "clean"])
     else:
-        call(["make", "-C", DEFAULTS['gluon_dir'],
+        call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
               "GLUON_SITEDIR="+ARGS.workspace,
               "GLUON_TARGET="+target,
               "clean"])
@@ -91,7 +91,7 @@ def build():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Cleaning target: {}".format(target))
-            call(["make", "-C", DEFAULTS['gluon_dir'],
+            call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                   "GLUON_SITEDIR="+ARGS.workspace,
                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
                                                   ARGS.build_number),
@@ -101,7 +101,7 @@ def build():
                   "all"])
     else:
         print("Cleaning target: {}".format(target))
-        call(["make", "-C", DEFAULTS['gluon_dir'],
+        call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
               "GLUON_SITEDIR="+ARGS.workspace,
               "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
                                               ARGS.build_number),
@@ -124,7 +124,7 @@ def build():
 
     # Create manifest
     print("Createing Manifest ...")
-    call(["make", "-C", DEFAULTS['gluon_dir'],
+    call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
           "GLUON_SITEDIR="+ARGS.workspace,
           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], ARGS.branch,
                                           ARGS.build_number),
