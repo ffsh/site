@@ -181,7 +181,10 @@ def main():
         DEFAULTS['release'] = data['version']
         DEFAULTS['priority'] = data['priority']
 
-
+    if "/" in ARGS.branch:
+        global ARGS
+        ARGS.branch = ARGS.branch.split("/")[1]
+        print("Warning: found \"/\" in branch name, changing to: {}".format(ARGS.branch))
     if ARGS.command == "clean":
         clean()
     elif ARGS.command == "update":
