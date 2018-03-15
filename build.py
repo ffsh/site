@@ -38,6 +38,8 @@ PARSER.add_argument("-n", metavar="Build Number", dest="build_number",
                     help="build.py -n ${BUILD_NUMBER}", required=True)
 PARSER.add_argument("-t", metavar="Target", dest="target",
                     help="build.py -t ar71xx-generic | ...", required=False)
+PARSER.add_argument("-s", metavar="Secret", dest="secret",
+                    help="build.py -s <path to secret>", required=False)
 PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
                     help="build.py -d /var/www/firmware (jenkins needs rw)", required=False)
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
@@ -143,7 +145,8 @@ def sign():
     """
     Signs the manifest
     """
-    pass
+    call(["contrib/sign.sh", ARGS.secret,
+          "{}/output/images/sysupgrade/{}.manifest".format(ARGS.secret, ARGS.branch)])
 
 def publish():
     """
