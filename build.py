@@ -166,12 +166,12 @@ def publish():
             with open(dir_source+"/build.json") as file:
                 old_build_date = json.load(file)["build_date"]
             dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
-
-            call(["cp", "-r", dir_source, dir_target])
+            call(["mkdir", "-p", dir_target])
+            call(["rsync", "-tr", dir_source, dir_target])
 
         dir_source = "{}/output/images".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
-        call(["cp", "-rL", dir_source, dir_target])
+        call(["rsync", "-tr", dir_source, dir_target])
     else:
         raise ValueError("{} Path does not exist!".format(directory))
 
