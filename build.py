@@ -146,7 +146,7 @@ def sign():
     Signs the manifest
     """
     call(["contrib/sign.sh", ARGS.secret,
-          "{}/output/images/sysupgrade/{}.manifest".format(ARGS.secret, ARGS.branch)])
+          "{}/output/images/sysupgrade/{}.manifest".format(ARGS.secret, DEFAULTS['branch'])])
 
 def publish():
     """
