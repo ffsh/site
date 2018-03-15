@@ -172,6 +172,9 @@ def publish():
         dir_source = "{}/output/images/*".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
         call(["rsync", "-tr", dir_source, dir_target])
+
+        print("delete images in workdir...")
+        call(["rm", "-rf", dir_source])
     else:
         raise ValueError("{} Path does not exist!".format(directory))
 
