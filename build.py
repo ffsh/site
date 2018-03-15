@@ -145,7 +145,7 @@ def sign():
     """
     Signs the manifest
     """
-    call(["{}/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
+    call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
           "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace, DEFAULTS['branch'])])
 
 def publish():
