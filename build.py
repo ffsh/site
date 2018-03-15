@@ -167,11 +167,11 @@ def publish():
                 old_build_date = json.load(file)["build_date"]
             dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
             call(["mkdir", "-p", dir_target])
-            call(["rsync", "-tr", dir_source, dir_target])
+            call(["rsync", "-Ltr", dir_source, dir_target])
 
         dir_source = "{}/output/images/".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
-        call(["rsync", "-tr", dir_source, dir_target])
+        call(["rsync", "-Ltr", dir_source, dir_target])
 
         print("delete images in workdir...")
         call(["rm", "-rf", dir_source])
