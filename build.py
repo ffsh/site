@@ -169,7 +169,7 @@ def publish():
             call(["mkdir", "-p", dir_target])
             call(["rsync", "-tr", dir_source, dir_target])
 
-        dir_source = "{}/output/images".format(ARGS.workspace)
+        dir_source = "{}/output/images/*".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
         call(["rsync", "-tr", dir_source, dir_target])
     else:
