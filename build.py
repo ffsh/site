@@ -11,7 +11,7 @@ import json
 import os
 import time
 from datetime import datetime
-from subprocess import call
+import subprocess as sp
 
 DEFAULTS = {
     'targets' : ['ar71xx-generic', 'ar71xx-tiny', 'ar71xx-nand',
@@ -62,56 +62,62 @@ def clean():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Cleaning target: {}".format(target))
-            call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                  "GLUON_SITEDIR="+ARGS.workspace,
-                  "GLUON_TARGET="+target,
-                  "clean"])
+            sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                           "GLUON_SITEDIR="+ARGS.workspace,
+                           "GLUON_TARGET="+target,
+                           "clean"])
     else:
-        call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-              "GLUON_SITEDIR="+ARGS.workspace,
-              "GLUON_TARGET="+target,
-              "clean"])
+        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                       "GLUON_SITEDIR="+ARGS.workspace,
+                       "GLUON_TARGET="+target,
+                       "clean"])
 
 def update():
     """
     Updates the repository
     """
-    call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-          "GLUON_SITEDIR="+ARGS.workspace,
-          "update"])
+    print("Starting update ...")
+    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                   "GLUON_SITEDIR="+ARGS.workspace,
+                   "update"])
+    print("Update done.")
 
 
 def build():
     """
     Build images definded by -t or default targets
     """
+    print("Starting building ...")
     if ARGS.target is not None:
         all_targets = False
         target = str(ARGS.target)
+        print("single target found")
     else:
         all_targets = True
+        print("build all Targets")
 
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Building target: {}".format(target))
-            call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                  "GLUON_SITEDIR="+ARGS.workspace,
-                  "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                                  ARGS.build_number),
-                  "GLUON_BRANCH="+DEFAULTS['branch'],
-                  "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                  "GLUON_TARGET="+target,
-                  "all"])
+            sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                           "GLUON_SITEDIR="+ARGS.workspace,
+                           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
+                                                           ARGS.build_number),
+                           "GLUON_BRANCH="+DEFAULTS['branch'],
+                           "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                           "GLUON_TARGET="+target,
+                           "all"])
     else:
         print("Building target: {}".format(target))
-        call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-              "GLUON_SITEDIR="+ARGS.workspace,
-              "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                              ARGS.build_number),
-              "GLUON_BRANCH="+DEFAULTS['branch'],
-              "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-              "GLUON_TARGET="+target,
-              "all"])
+        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                       "GLUON_SITEDIR="+ARGS.workspace,
+                       "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
+                                                       ARGS.build_number),
+                       "GLUON_BRANCH="+DEFAULTS['branch'],
+                       "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                       "GLUON_TARGET="+target,
+                       "all"])
+
     print("Generating buid.json")
     time_stamp_sec = time.time()
     time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
@@ -130,23 +136,24 @@ def build():
 
     if not os.path.isdir("{}/tmp/origin/".format(ARGS.workspace)):
         # Make sure that the tmp dir exists
-        call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
+        sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
 
-    call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-          "GLUON_SITEDIR="+ARGS.workspace,
-          "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                          ARGS.build_number),
-          "GLUON_BRANCH="+DEFAULTS['branch'],
-          "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-          "GLUON_TARGET="+target,
-          "manifest"])
+    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                   "GLUON_SITEDIR="+ARGS.workspace,
+                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
+                                                   ARGS.build_number),
+                   "GLUON_BRANCH="+DEFAULTS['branch'],
+                   "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                   "GLUON_TARGET="+target,
+                   "manifest"])
 
 def sign():
     """
     Signs the manifest
     """
-    call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
-          "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace, DEFAULTS['branch'])])
+    sp.check_call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
+                   "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace,
+                                                                    DEFAULTS['branch'])])
 
 def publish():
     """
@@ -166,15 +173,15 @@ def publish():
             with open(dir_source+"/build.json") as file:
                 old_build_date = json.load(file)["build_date"]
             dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
-            call(["mkdir", "-p", dir_target])
-            call(["rsync", "-Ltr", dir_source, dir_target])
+            sp.check_call(["mkdir", "-p", dir_target])
+            sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
 
         dir_source = "{}/output/images/".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
-        call(["rsync", "-Ltr", dir_source, dir_target])
+        sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
 
         print("delete images in workdir...")
-        call(["rm", "-rf", dir_source])
+        sp.check_call(["rm", "-rf", dir_source])
     else:
         raise ValueError("{} Path does not exist!".format(directory))
 
