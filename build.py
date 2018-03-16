@@ -85,15 +85,15 @@ def build():
     """
     Build images definded by -t or default targets
     """
-    try:
-        target = str(ARGS.target)
+    if ARGS.target is not None:
         all_targets = False
-    except TypeError:
+        target = str(ARGS.target)
+    else:
         all_targets = True
 
     if all_targets:
         for target in DEFAULTS["targets"]:
-            print("Cleaning target: {}".format(target))
+            print("Building target: {}".format(target))
             call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                   "GLUON_SITEDIR="+ARGS.workspace,
                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
@@ -103,7 +103,7 @@ def build():
                   "GLUON_TARGET="+target,
                   "all"])
     else:
-        print("Cleaning target: {}".format(target))
+        print("Building target: {}".format(target))
         call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
               "GLUON_SITEDIR="+ARGS.workspace,
               "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
