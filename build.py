@@ -21,7 +21,8 @@ DEFAULTS = {
                  'x86-geode', 'x86-64 ramips-mt7620',
                  'ramips-mt76x8', 'ramips-rt305x'],
     'gluon_dir': '/gluon',
-    'makeopts' : '-j1 V=s',
+    'make_cores' : 1,
+    'make_loglevel': 'V=s'
     'release': '2018.1',
     'priority': 1,
     'branch': 'dev'
@@ -103,7 +104,8 @@ def build():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Building target: {}".format(target))
-            sp.check_call(["make", DEFAULTS['makeopts'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+            sp.check_call(["make", "-j", DEFAULTS['cores'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                           DEFAULTS['make_loglevel'],
                            "GLUON_SITEDIR="+ARGS.workspace,
                            "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                            ARGS.build_number),
@@ -113,7 +115,8 @@ def build():
                            "all"])
     else:
         print("Building target: {}".format(target))
-        sp.check_call(["make", DEFAULTS['makeopts'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+        sp.check_call(["make", "-j", DEFAULTS['cores'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                       DEFAULTS['make_loglevel'],
                        "GLUON_SITEDIR="+ARGS.workspace,
                        "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                        ARGS.build_number),
