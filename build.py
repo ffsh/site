@@ -103,7 +103,7 @@ def build():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Building target: {}".format(target))
-            sp.check_call(["make", "-C", DEFAULTS['makeopts'], ARGS.workspace+DEFAULTS['gluon_dir'],
+            sp.check_call(["make", DEFAULTS['makeopts'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                            "GLUON_SITEDIR="+ARGS.workspace,
                            "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                            ARGS.build_number),
@@ -113,7 +113,7 @@ def build():
                            "all"])
     else:
         print("Building target: {}".format(target))
-        sp.check_call(["make", "-C", DEFAULTS['makeopts'], ARGS.workspace+DEFAULTS['gluon_dir'],
+        sp.check_call(["make", DEFAULTS['makeopts'], "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                        "GLUON_SITEDIR="+ARGS.workspace,
                        "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                        ARGS.build_number),
