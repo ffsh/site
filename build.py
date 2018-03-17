@@ -21,7 +21,7 @@ DEFAULTS = {
                  'x86-geode', 'x86-64 ramips-mt7620',
                  'ramips-mt76x8', 'ramips-rt305x'],
     'gluon_dir': '/gluon',
-    'makeopts' : 'V=s -j1',
+    'makeopts' : '-j1 V=s',
     'release': '2018.1',
     'priority': 1,
     'branch': 'dev'
