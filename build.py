@@ -21,7 +21,7 @@ DEFAULTS = {
                  'x86-geode', 'x86-64 ramips-mt7620',
                  'ramips-mt76x8', 'ramips-rt305x'],
     'gluon_dir': '/gluon',
-    'makeopts' : 'V=s -j$(expr $(nproc) + 1)',
+    'makeopts' : 'V=s -j1',
     'release': '2018.1',
     'priority': 1,
     'branch': 'dev'
@@ -88,6 +88,10 @@ def build():
     Build images definded by -t or default targets
     """
     print("Starting building ...")
+    print("delete OLD images in workdir...")
+    dir_source = "{}/output/images/".format(ARGS.workspace)
+    sp.check_call(["rm", "-rf", dir_source])
+
     if ARGS.target is not None:
         all_targets = False
         target = str(ARGS.target)
@@ -99,7 +103,7 @@ def build():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Building target: {}".format(target))
-            sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+            sp.check_call(["make", "-C", DEFAULTS['makeopts'], ARGS.workspace+DEFAULTS['gluon_dir'],
                            "GLUON_SITEDIR="+ARGS.workspace,
                            "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                            ARGS.build_number),
@@ -109,7 +113,7 @@ def build():
                            "all"])
     else:
         print("Building target: {}".format(target))
-        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+        sp.check_call(["make", "-C", DEFAULTS['makeopts'], ARGS.workspace+DEFAULTS['gluon_dir'],
                        "GLUON_SITEDIR="+ARGS.workspace,
                        "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
                                                        ARGS.build_number),
