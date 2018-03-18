@@ -2,7 +2,7 @@
 """
 Build script for Freifunk Suedholstein firmware runningn on Jenkins CI
 
-Source: https://github.com/ffsh
+Source: https://github.com/ffsh/site
 Web: https://freifunk-suedholstein.de
 
 """
@@ -21,7 +21,7 @@ DEFAULTS = {
                  'x86-geode', 'x86-64 ramips-mt7620',
                  'ramips-mt76x8', 'ramips-rt305x'],
     'gluon_dir': '/gluon',
-    'make_cores' : 1,
+    'make_cores' : "1",
     'make_loglevel': 'V=s',
     'release': '2018.1',
     'priority': 1,
