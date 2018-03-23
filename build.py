@@ -48,7 +48,7 @@ PARSER.add_argument("--commit", metavar="Commit", dest="commit",
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
                     help="build.py --cores 4", required=False)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
-                    help="build.py --log V=s", required=False)
+                    help="build.py --log V=s | V=1", required=False)
 
 
 ARGS = PARSER.parse_args()
@@ -214,7 +214,7 @@ def main():
         DEFAULTS['make_cores'] = ARGS.cores
 
     if ARGS.log is not None:
-        print("INFO: Log = {}".format(ARGS.cores))
+        print("INFO: Log = {}".format(ARGS.log))
         DEFAULTS['make_loglevel'] = ARGS.log
 
     if "/" in ARGS.branch:
