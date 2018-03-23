@@ -45,6 +45,11 @@ PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
                     help="build.py -d /var/www/firmware (jenkins needs rw)", required=False)
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
                     help="build.py --commit sha", required=True)
+PARSER.add_argument("--cores", metavar="Cores", dest="cores",
+                    help="build.py --cores 4", required=False)
+PARSER.add_argument("--log", metavar="Log Level", dest="log",
+                    help="build.py --log V=s", required=False)
+
 
 ARGS = PARSER.parse_args()
 
@@ -203,6 +208,14 @@ def main():
         data = json.load(file)
         DEFAULTS['release'] = data['version']
         DEFAULTS['priority'] = data['priority']
+
+    if ARGS.cores is not None:
+        print("INFO: Cores = {}".format(ARGS.cores))
+        DEFAULTS['make_cores'] = ARGS.cores
+
+    if ARGS.log:
+        print("INFO: Log = {}".format(ARGS.cores))
+        DEFAULTS['make_loglevel'] = ARGS.log
 
     if "/" in ARGS.branch:
         DEFAULTS['branch'] = ARGS.branch.split("/")[1]
