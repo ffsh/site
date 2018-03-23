@@ -48,7 +48,8 @@ PARSER.add_argument("--commit", metavar="Commit", dest="commit",
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
                     help="build.py --cores 4", required=False)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
-                    help="build.py --log V=s | V=1", required=False)
+                    help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
+                    required=False)
 
 
 ARGS = PARSER.parse_args()
