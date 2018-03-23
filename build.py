@@ -213,7 +213,7 @@ def main():
         print("INFO: Cores = {}".format(ARGS.cores))
         DEFAULTS['make_cores'] = ARGS.cores
 
-    if ARGS.log:
+    if ARGS.log is not None:
         print("INFO: Log = {}".format(ARGS.cores))
         DEFAULTS['make_loglevel'] = ARGS.log
 
