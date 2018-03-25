@@ -1,6 +1,9 @@
+[![Build Status](http://jenkins.grotax.de/buildStatus/icon?job=FFSH-Firmware)](http://jenkins.grotax.de/job/FFSH-Firmware/)
+
 # Freifunk Südholstein Site-Konfiguration
 
 In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gepflegt.
+
 
 ## Branch Struktur
 
