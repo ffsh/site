@@ -17,7 +17,8 @@ In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gep
 
 ## Firmware selber bauen:
 
-Für das bauen der Firmware haben wir ein Python script. Dadurch können wir die Firmware automatisch bauen. Es kann jedoch auch
+Für das bauen der Firmware haben wir ein Python script. Dadurch können wir die Firmware automatisch bauen.
+Das script kann aber auch zum manuellen bauen genutzt werden.
 
 ### build.py Argumente:
 
