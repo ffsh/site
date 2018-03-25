@@ -1,4 +1,4 @@
-[![Build Status](http://jenkins.grotax.de/buildStatus/icon?job=FFSH-Firmware)](http://jenkins.grotax.de/job/FFSH-Firmware/)
+[![Build Status](https://jenkins.grotax.de/buildStatus/icon?job=FFSH-Firmware)](https://jenkins.grotax.de/job/FFSH-Firmware/)
 
 # Freifunk Südholstein Site-Konfiguration
 
