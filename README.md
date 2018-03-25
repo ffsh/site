@@ -21,24 +21,27 @@ Für das bauen der Firmware haben wir ein Python script. Dadurch können wir die
 
 ### build.py Argumente:
 
-Optionen für -c (command - Befehl):
-- build.py -c update ruft make update auf.
-    - Muss vor dem bauen ausgeführt werden, aktuallisiert die Abhängigkeiten
-- build.py -c build ruft make all auf.
-    - Baut die Firmware und erstellt ein manfiest
-- build.py -c clean ruft make clean auf.
-    - Löscht daten des targets also pakete etc. sollte man nur im Fehlerfall nutzen
-- build.py -c sign ruft das sign script auf.
-    - Signiert das manifest
-- build.py -c publish
-    - kopiert die images an einen beliebigen anderen ort (wichtig für jenkins)
+build.py -c aka command:
 
-Weitere Optionen:
-- -b branch, der aktuelle Branch (Pflicht)
-- -n Build nummer (jenkins führt diese Nummer, ist beliebig) (Pflicht)
-- -w Workspace, das site Verzeichnis (Pflicht)
-- --commit, der aktuelle commit (Pflicht)
+| command | value  | make "equivalent" | Kommentar                                 |
+|---------|--------|-------------------|-------------------------------------------|
+| -c      | update | make update       | lädt opwenwrt und wendet gluon patches an |
+| -c      | build  | make build        | baut die firmware                         |
+| -c      | clean  | make clean        | löscht alle packages                      |
+| -c      | sign   | n/a               | signiert die firmware                     |
 
+
+| command | value | default | name | pflicht | Kommentar |
+|---|---|---|---|---|----|
+| -b | dev or testing or rc or stable | dev | Branch | ja | der Firmware branch |
+| -w | site | n/a | Workspace | ja | Pfad zum site Repository |
+| -n | 42 | n/a | Build Number | ja | build Nummer wird von jenkins automatisch hochgezählt wird im firmware Namen verwendet |
+| -t | ar71xx-generic or ... | all targets | Target | nein | ohne Angabe werden alle Targets gebaut, mit angabe nur der angegebene Target |
+| -s | <pfad zu secret> | n/a | Secret | nein | wird nur beim signieren benötigt |
+| -d | <pfad zu public directory> | n/a | Directory | nein | wird nur bei -publish benötigt |
+| --commit | der verwendete commit | n/a | Commit | ja | commit sha, dient als Refferenz im build.json |
+| --cores | 1 bis N | 1 | Cores | nein | Anzahl der zu verwenden Threads, Empfehlung: CPU-Kerne+1 |
+| --log | w or s | s | Log | nein | Log level w: nur warnungen/Fehler, s: alles |
 
 
 ```
