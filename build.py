@@ -189,7 +189,7 @@ def publish():
                 old_build_date = json.load(file)["build_date"]
             dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
             sp.check_call(["mkdir", "-p", dir_target])
-            sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
+            sp.check_call(["rsync", "-Ltr", "--remove-source-files", dir_source, dir_target])
 
         dir_source = "{}/output/images/".format(ARGS.workspace)
         dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
