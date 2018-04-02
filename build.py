@@ -30,7 +30,8 @@ DEFAULTS = {
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument("-c", metavar="Command", dest="command",
-                    help="build.py -c clean | update | build | sign | publish", required=True)
+                    help="build.py -c clean | dirclean | update | build | sign | publish",
+                    required=True)
 PARSER.add_argument("-b", metavar="Branch", dest="branch",
                     help="build.py -b dev | testing | rc | stable", required=True)
 PARSER.add_argument("-w", metavar="Workspace", dest="workspace",
@@ -78,6 +79,16 @@ def clean():
                        "GLUON_SITEDIR="+ARGS.workspace,
                        "GLUON_TARGET="+target,
                        "clean"])
+
+def dirclean():
+    """
+    Clean with dirclean
+    """
+    print("Starting dirclean ...")
+    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                   "GLUON_SITEDIR="+ARGS.workspace,
+                   "dirclean"])
+    print("dirclean done.")
 
 def update():
     """
@@ -238,6 +249,8 @@ def main():
 
     if ARGS.command == "clean":
         clean()
+    elif ARGS.command == "dirclean":
+        dirclean()
     elif ARGS.command == "update":
         update()
     elif ARGS.command == "build":
@@ -247,7 +260,8 @@ def main():
     elif ARGS.command == "publish":
         publish()
     else:
-        raise ValueError("Command can only be one of: clean | update | build | sign | publish")
+        raise ValueError("Command can only be one of: clean |"+
+                         " dirclean | update | build | sign | publish")
 
 
 if __name__ == '__main__':
