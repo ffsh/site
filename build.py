@@ -98,7 +98,10 @@ def build():
     print("delete OLD images in workdir...")
     dir_source = "{}/output/images/".format(ARGS.workspace)
     sp.check_call(["rm", "-rf", dir_source])
-
+    build_errors = {
+        "number": 0,
+        "errors": []
+    }
     if ARGS.target is not None:
         all_targets = False
         target = str(ARGS.target)
@@ -110,16 +113,23 @@ def build():
     if all_targets:
         for target in DEFAULTS["targets"]:
             print("Building target: {}".format(target))
-            sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
-                           ARGS.workspace+DEFAULTS['gluon_dir'],
-                           DEFAULTS['make_loglevel'],
-                           "GLUON_SITEDIR="+ARGS.workspace,
-                           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                                           ARGS.build_number),
-                           "GLUON_BRANCH="+DEFAULTS['branch'],
-                           "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                           "GLUON_TARGET="+target,
-                           "all"])
+            try:
+                sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
+                               ARGS.workspace+DEFAULTS['gluon_dir'],
+                               DEFAULTS['make_loglevel'],
+                               "GLUON_SITEDIR="+ARGS.workspace,
+                               "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
+                                                               DEFAULTS['branch'],
+                                                               ARGS.build_number),
+                               "GLUON_BRANCH="+DEFAULTS['branch'],
+                               "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                               "GLUON_TARGET="+target,
+                               "all"])
+            except sp.CalledProcessError as process_error:
+                print(process_error)
+                build_errors["errors"].append(process_error)
+                build_errors["number"] += 1
+
     else:
         print("Building target: {}".format(target))
         sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
@@ -161,6 +171,10 @@ def build():
                    "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
                    "GLUON_TARGET="+target,
                    "manifest"])
+    if build_errors["number"] > 0:
+        for error in build_errors["build_errors"]:
+            print(error)
+        exit(1)
 
 def sign():
     """
