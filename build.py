@@ -105,8 +105,8 @@ def build():
     """
     Build images definded by -t or default targets
     """
-    print("Starting building ...")
-    print("delete OLD images in workdir...")
+    print("Info: Starting building ...")
+    print("Info: delete OLD images in workdir...")
     dir_source = "{}/output/images/".format(ARGS.workspace)
     sp.check_call(["rm", "-rf", dir_source])
     build_errors = {
@@ -116,14 +116,14 @@ def build():
     if ARGS.target is not None:
         all_targets = False
         target = str(ARGS.target)
-        print("single target found")
+        print("Info: single target found")
     else:
         all_targets = True
-        print("build all Targets")
+        print("Info: build all Targets")
 
     if all_targets:
         for target in DEFAULTS["targets"]:
-            print("Building target: {}".format(target))
+            print("Info: Building target: {}".format(target))
             try:
                 sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
                                ARGS.workspace+DEFAULTS['gluon_dir'],
@@ -142,7 +142,7 @@ def build():
                 build_errors["number"] += 1
 
     else:
-        print("Building target: {}".format(target))
+        print("Info: Building target: {}".format(target))
         sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
                        ARGS.workspace+DEFAULTS['gluon_dir'],
                        DEFAULTS['make_loglevel'],
@@ -154,7 +154,7 @@ def build():
                        "GLUON_TARGET="+target,
                        "all"])
 
-    print("Generating buid.json")
+    print("Info: Generating buid.json")
     time_stamp_sec = time.time()
     time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
     data = {
@@ -183,8 +183,13 @@ def build():
                    "GLUON_TARGET="+target,
                    "manifest"])
     if build_errors["number"] > 0:
-        for error in build_errors["build_errors"]:
+        print("=============================")
+        print("Error: We have {} Build errors".format(build_errors["number"]))
+        for error in build_errors["errors"]:
+            print("-------------------------")
             print(error)
+            print("-------------------------")
+        print("=============================")
         exit(1)
 
 def sign():
