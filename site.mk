@@ -26,7 +26,8 @@ endif
 
 ifeq ($(GLUON_TARGET),ar71xx-tiny)
 GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
+    gluon-ssid-changer \
+    gluon-au-change
 endif
 
 ifeq ($(GLUON_TARGET),ar71xx-nand)
