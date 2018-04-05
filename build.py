@@ -250,6 +250,9 @@ def main():
     if "/" in ARGS.branch:
         DEFAULTS['branch'] = ARGS.branch.split("/")[1]
         print("Warning: found \"/\" in branch name, changing to: {}".format(DEFAULTS['branch']))
+    elif ARGS.branch is not None:
+        DEFAULTS['branch'] = ARGS.branch
+        print("Info: branch switched to: {}".format(DEFAULTS['branch']))
 
     if ARGS.command == "clean":
         clean()
