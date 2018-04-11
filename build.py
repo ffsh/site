@@ -228,7 +228,7 @@ def publish():
         sp.check_call(["rm", "-rf", dir_source])
     else:
         raise ValueError("{} Path does not exist!".format(directory))
-    clean()
+    #clean()
 
 def main():
     """
