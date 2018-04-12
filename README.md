@@ -15,22 +15,33 @@ In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gep
 | stable  | n/a          | Für alle anderen, empfohlene Version               |
 
 
+## Jenkins
+Die Firmware wird automatisch mit der Hilfe von build.py gebaut. Sobald ein commit in das Repository gepusht wird informiert GitHub die Jenkins Instaz über die Änderung und Jenkins prüft ob ein build notwendig ist.
+Wenn du änderungen am Repository machen willst die keinen build auslösen sollen (dieser benötigt 1-3 Stunden) dann kannst du deiner Commit Message ein [NO-BUILD] als Prefix verpassen.
+```
+git commit -m "[NO-BUILD] änderungen am changelog"
+
+```
+Den aktuellen build Status siehst du oben in dieser README oder du gehst auf [jenkins.grotax.de](https://jenkins.grotax.de). Wenn der Build erfolgreich war, werden die images auf [firmware.grotax.de](https://firmware.grotax.de) veröffentlicht. Diese sind jedoch nicht für das automatische Update freigegeben.
+
 ## Firmware selber bauen:
 
-Für das bauen der Firmware haben wir ein Python script. Dadurch können wir die Firmware automatisch bauen.
-Das script kann aber auch zum manuellen bauen genutzt werden.
+Für das bauen der Firmware haben wir ein Python Script. Dadurch können wir die Firmware automatisch bauen.
+Das script kann aber auch zum manuellen bauen genutzt werden. Ein Beispiel findet sich weiter unten.
 
 ### build.py Argumente:
 
-build.py -c aka command:
+Hier werden alle verfügbaren Befehle des Scripts erläutert.
 
-| command | value  | make "equivalent" | Kommentar                                 |
-|---------|--------|-------------------|-------------------------------------------|
-| -c      | update | make update       | lädt opwenwrt und wendet gluon patches an |
-| -c      | build  | make build        | baut die firmware                         |
-| -c      | clean  | make clean        | löscht alle packages                      |
-| -c      | sign   | n/a               | signiert die firmware                     |
+| command | value    | make "equivalent" | Kommentar                                       |
+|---------|----------|-------------------|-------------------------------------------------|
+| -c      | update   | make update       | lädt opwenwrt und wendet gluon patches an       |
+| -c      | build    | make build        | baut die firmware                               |
+| -c      | clean    | make clean        | löscht alle packages des targets                |
+| -c      | dirclean | make dirclean     | löscht alle targets und die toolchain (kaputt!) |
+| -c      | sign     | n/a               | signiert die firmware                           |
 
+Weitere Argumente für das Script:
 
 | command | value | default | name | pflicht | Kommentar |
 |---|---|---|---|---|----|
@@ -44,7 +55,7 @@ build.py -c aka command:
 | --cores | 1 bis N | 1 | Cores | nein | Anzahl der zu verwenden Threads, Empfehlung: CPU-Kerne+1 |
 | --log | w or s | s | Log | nein | Log level w: nur warnungen/Fehler, s: alles |
 
-
+Beispiel:
 ```
 ./build.py -c update -b dev -n 42 -w $(pwd) --commit $(git rev-parse HEAD)
 ./build.py -c build -t "ar71xx-tiny" -b dev -n 42 -w $(pwd) --commit $(git rev-parse HEAD)
