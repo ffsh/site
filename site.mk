@@ -19,21 +19,21 @@ GLUON_SITE_PACKAGES := \
 
 GLUON_MULTIDOMAIN=1
 
-ifeq ($(GLUON_TARGET),ar71xx-generic)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
-endif
+#ifeq ($(GLUON_TARGET),ar71xx-generic)
+#GLUON_SITE_PACKAGES += \
+#    gluon-ssid-changer
+#endif
 
-ifeq ($(GLUON_TARGET),ar71xx-tiny)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer \
-    gluon-au-change
-endif
+#ifeq ($(GLUON_TARGET),ar71xx-tiny)
+#GLUON_SITE_PACKAGES += \
+#    gluon-ssid-changer \
+#    gluon-au-change
+#endif
 
-ifeq ($(GLUON_TARGET),ar71xx-nand)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
-endif
+#ifeq ($(GLUON_TARGET),ar71xx-nand)
+#GLUON_SITE_PACKAGES += \
+#    gluon-ssid-changer
+#endif
 
 
 # add addition network drivers and usb stuff only to targes where disk space does not matter.
