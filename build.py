@@ -12,13 +12,14 @@ import os
 import time
 from datetime import datetime
 import subprocess as sp
-# 'brcm2708-bcm2708', 'brcm2708-bcm2709', 'ramips-rt305x', 'sunxi-cortexa7'
+#
 
 DEFAULTS = {
     'targets' : ['ar71xx-generic', 'ar71xx-tiny', 'ar71xx-nand',
-                 'mpc85xx-generic', 'ramips-mt7621', 'x86-generic',
+                 'brcm2708-bcm2708', 'brcm2708-bcm2709', 'mpc85xx-generic',
+                 'ramips-mt7621', 'sunxi-cortexa7', 'x86-generic',
                  'x86-geode', 'x86-64', 'ramips-mt7620',
-                 'ramips-mt76x8'],
+                 'ramips-mt76x8', 'ramips-rt305x'],
     'gluon_dir': '/gluon',
     'make_cores' : "1",
     'make_loglevel': 'V=s',
