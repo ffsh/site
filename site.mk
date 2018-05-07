@@ -11,12 +11,13 @@ GLUON_FEATURES := \
     web-advanced \
     web-wizard \
     web-private-wifi \
-    config-mode-domain-select \
-    gluon-ebtables-limit-arp
+    config-mode-domain-select
+
 
 GLUON_SITE_PACKAGES := \
     iwinfo \
-    haveged
+    haveged \
+    gluon-ebtables-limit-arp
 
 GLUON_MULTIDOMAIN=1
 
@@ -27,8 +28,7 @@ endif
 
 ifeq ($(GLUON_TARGET),ar71xx-tiny)
 GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer \
-    gluon-au-change
+    gluon-ssid-changer
 endif
 
 ifeq ($(GLUON_TARGET),ar71xx-nand)
