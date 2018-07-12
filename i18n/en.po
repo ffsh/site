@@ -21,13 +21,17 @@ msgstr "Domain"
 msgid "gluon-config-mode:domain-select"
 msgstr ""
 "Here you have the possibility of selecting the mesh domain in which your node "
-"is placed. This will determin the SSID (the Name of your hotspot)."
+"is placed. Please keep in mind that your router only connects with the nodes "
+"of the selected domain"
 
 msgid "gluon-config-mode:pubkey"
 msgstr ""
-"<p>This is your Freifunk node's public key. You may send it"
-"together with your node's name (<em><%=pcdata(hostname)%></em>) to "
-"<a href=\"mailto:keys@freifunk-suedholstein.de?subject=<%= urlencode('New Node: ' .. hostname) %>&amp;"
+"<p>This is your Freifunk node's public key. The node will be able to "
+"connect to the mesh VPN. You may register your key this can help us to contact you "
+"if your node has some problem. We won't share your information. "
+"If you want to delete your data you can always send us an e-mail with DELETE ME in the subject."
+"To register, send the key together with your node's name (<em><%=pcdata(hostname)%></em>) to "
+"<a href=\"mailto:keys@freifunk-suedholstein.de?subject=<%= urlencode('Registration: ' .. hostname) %>&amp;"
 "body=<%= urlencode('# ' .. hostname .. '\n' .. pubkey) %>\">keys@freifunk-suedholstein.de</a>."
 "</p>"
 "<div class=\"the-key\">"
@@ -46,7 +50,7 @@ msgid "gluon-config-mode:reboot"
 msgstr ""
 "<p>Your node <em><%= pcdata(hostname) %></em> is currently rebooting and will "
 "try to connect to other nearby Freifunk nodes after that. For more "
-"information about the Freifunk community on Südholstein, have a look at "
+"information about the Freifunk community on Freifunk Suedholstein, have a look at "
 "<a href=\"https://freifunk-suedholstein.de/\">our homepage</a>.</p>"
 "<p>To get back to this configuration interface, press the reset button for "
 "3 seconds during normal operation. The device will then reboot into config "
@@ -60,3 +64,21 @@ msgid "gluon-config-mode:altitude-help"
 msgstr ""
 "Specifying the altitude is optional and should only be done if a proper "
 "value is known."
+
+# Leave empty to use the default text, which can be found in:
+# package/gluon-config-mode-hostname/i18n/
+msgid "gluon-config-mode:hostname-help"
+msgstr ""
+
+# Leave empty to use the default text, which can be found in:
+# package/gluon-config-mode-geo-location/i18n/
+msgid "gluon-config-mode:geo-location-help"
+msgstr ""
+
+# Leave empty to use the default text, which can be found in:
+# package/gluon-config-mode-contact-info/i18n/
+msgid "gluon-config-mode:contact-help"
+msgstr ""
+
+msgid "gluon-config-mode:contact-note"
+msgstr ""
