@@ -92,7 +92,7 @@ GLUON_SITE_PACKAGES += \
     kmod-usb-net-dm9601-ether
 endif
 
-DEFAULT_GLUON_RELEASE := 2018.1+t$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 2018.1.x-$(shell date '+%Y%m%d')
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
