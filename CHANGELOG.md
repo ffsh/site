@@ -8,8 +8,8 @@
 |---------|---------------|----------|
 | dev     | ja            | 11.07.18 |
 | testing | ja            | 11.07.18 |
-| rc      | nein          | n/a   |
-| stable  | nein          | n/a   |
+| rc      | nein          | 24.07.18 |
+| stable  | nein          | 24.07.18 |
 
 ##### FFSH:
 

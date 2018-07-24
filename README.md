@@ -7,12 +7,12 @@ In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gep
 
 ## Branch Struktur
 
-| branch  | gluon-branch | Kommentar                                          |
-|---------|--------------|----------------------------------------------------|
-| dev     | next         | Nur für Entwickler enthält experimentelle Software |
-| testing | n/a          | Zum testen einer neuen Version für interessierte.  |
-| rc      | n/a          | Zum erneuten testen (in einer größeren Gruppe)     |
-| stable  | n/a          | Für alle anderen, empfohlene Version               |
+| branch  | gluon-branch  | Kommentar                                          |
+|---------|---------------|----------------------------------------------------|
+| dev     | master        | Nur für Entwickler enthält experimentelle Software |
+| testing | v2018.1.x     | Zum testen einer neuen Version für interessierte.  |
+| rc      | v2018.1 (tag) | Zum erneuten testen (in einer größeren Gruppe)     |
+| stable  | v2018.1 (tag) | Für alle anderen, empfohlene Version               |
 
 
 ## Jenkins
