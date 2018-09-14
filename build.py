@@ -25,7 +25,6 @@ DEFAULTS = {
                  'x86-generic',
                  'x86-geode',
                  'x86-64',
-                 'ipq806x',
                  'ramips-mt7620',
                  'ramips-mt7628',
                  'ramips-rt305x'
