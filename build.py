@@ -21,12 +21,10 @@ DEFAULTS = {
                  'brcm2708-bcm2709',
                  'mpc85xx-generic',
                  'ramips-mt7621',
-                 'sunxi',
                  'x86-generic',
                  'x86-geode',
                  'x86-64',
                  'ramips-mt7620',
-                 'ramips-mt7628',
                  'ramips-rt305x'
                 ],
     'gluon_dir': '/gluon',
