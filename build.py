@@ -63,96 +63,132 @@ PARSER.add_argument("--log", metavar="Log Level", dest="log",
 ARGS = PARSER.parse_args()
 
 
-def clean():
-    """
-    Cleans the output Directory. Not necessary!
-    """
-    try:
-        target = str(ARGS.target)
-        print(target+" "+type(target))
-        all_targets = False
-    except TypeError:
-        all_targets = True
+class Builder():
+    """docstring for Builder"""
+    def __init__(self, arg):
+        super().__init__()
+        self.arg = arg
 
-    if all_targets:
-        for target in DEFAULTS["targets"]:
-            print("Cleaning target: {}".format(target))
+    def clean(self):
+        """
+        Cleans the output Directory. Not necessary!
+        """
+        try:
+            target = str(ARGS.target)
+            print(target+" "+type(target))
+            all_targets = False
+        except TypeError:
+            all_targets = True
+
+        if all_targets:
+            for target in DEFAULTS["targets"]:
+                print("Cleaning target: {}".format(target))
+                sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                               "GLUON_SITEDIR="+ARGS.workspace,
+                               "GLUON_TARGET="+target,
+                               "clean"])
+        else:
             sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                            "GLUON_SITEDIR="+ARGS.workspace,
                            "GLUON_TARGET="+target,
                            "clean"])
-    else:
+
+    def dirclean(self):
+        """
+        Clean with dirclean
+        """
+        print("Starting dirclean ...")
         sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                        "GLUON_SITEDIR="+ARGS.workspace,
-                       "GLUON_TARGET="+target,
-                       "clean"])
+                       "dirclean"])
+        print("dirclean done.")
 
-def dirclean():
-    """
-    Clean with dirclean
-    """
-    print("Starting dirclean ...")
-    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                   "GLUON_SITEDIR="+ARGS.workspace,
-                   "dirclean"])
-    print("dirclean done.")
-
-def update():
-    """
-    Updates the repository
-    """
-    print("Starting update ...")
-    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                   "GLUON_SITEDIR="+ARGS.workspace,
-                   "update"])
-    print("Update done.")
+    def update(self):
+        """
+        Updates the repository
+        """
+        print("Starting update ...")
+        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
+                       "GLUON_SITEDIR="+ARGS.workspace,
+                       "update"])
+        print("Update done.")
 
 
-def build():
-    """
-    Build images definded by -t or default targets
-    """
-    print("Info: Starting building ...")
-    print("Info: delete OLD images in workdir...")
-    dir_source = "{}/output/images/".format(ARGS.workspace)
-    sp.check_call(["rm", "-rf", dir_source])
-    build_errors = {
-        "number": 0,
-        "errors": []
-    }
-    if ARGS.target is not None:
-        all_targets = False
-        target = str(ARGS.target)
-        print("Info: single target found")
-    else:
-        all_targets = True
-        print("Info: build all Targets")
+    def build(self):
+        """
+        Build images definded by -t or default targets
+        """
+        print("Info: Starting building ...")
+        print("Info: delete OLD images in workdir...")
+        dir_source = "{}/output/images/".format(ARGS.workspace)
+        sp.check_call(["rm", "-rf", dir_source])
+        build_errors = {
+            "number": 0,
+            "errors": []
+        }
+        if ARGS.target is not None:
+            all_targets = False
+            target = str(ARGS.target)
+            print("Info: single target found")
+        else:
+            all_targets = True
+            print("Info: build all Targets")
 
-    if all_targets:
-        for target in DEFAULTS["targets"]:
+        if all_targets:
+            for target in DEFAULTS["targets"]:
+                print("Info: Building target: {}".format(target))
+                try:
+                    sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
+                                   ARGS.workspace+DEFAULTS['gluon_dir'],
+                                   DEFAULTS['make_loglevel'],
+                                   "GLUON_SITEDIR="+ARGS.workspace,
+                                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
+                                                                   ARGS.build_number,
+                                                                   DEFAULTS['branch']),
+                                   "GLUON_BRANCH="+DEFAULTS['branch'],
+                                   "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                                   "GLUON_TARGET="+target,
+                                   "all"])
+                except sp.CalledProcessError as process_error:
+                    print(process_error)
+                    build_errors["errors"].append(process_error)
+                    build_errors["number"] += 1
+
+        else:
             print("Info: Building target: {}".format(target))
-            try:
-                sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
-                               ARGS.workspace+DEFAULTS['gluon_dir'],
-                               DEFAULTS['make_loglevel'],
-                               "GLUON_SITEDIR="+ARGS.workspace,
-                               "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
-                                                               ARGS.build_number,
-                                                               DEFAULTS['branch']),
-                               "GLUON_BRANCH="+DEFAULTS['branch'],
-                               "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                               "GLUON_TARGET="+target,
-                               "all"])
-            except sp.CalledProcessError as process_error:
-                print(process_error)
-                build_errors["errors"].append(process_error)
-                build_errors["number"] += 1
+            sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
+                           ARGS.workspace+DEFAULTS['gluon_dir'],
+                           DEFAULTS['make_loglevel'],
+                           "GLUON_SITEDIR="+ARGS.workspace,
+                           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
+                                                           ARGS.build_number,
+                                                           DEFAULTS['branch']),
+                           "GLUON_BRANCH="+DEFAULTS['branch'],
+                           "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                           "GLUON_TARGET="+target,
+                           "all"])
 
-    else:
-        print("Info: Building target: {}".format(target))
-        sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
-                       ARGS.workspace+DEFAULTS['gluon_dir'],
-                       DEFAULTS['make_loglevel'],
+        print("Info: Generating buid.json")
+        time_stamp_sec = time.time()
+        time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
+        data = {
+            'build_date' : time_stamp,
+            'release' : "{}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
+                                          ARGS.build_number),
+            'branch' : DEFAULTS['branch'],
+            'commit' : ARGS.commit
+        }
+        with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
+            json.dump(data, file)
+
+        # Create manifest
+        print("Createing Manifest ...")
+
+        if not os.path.isdir("{}/tmp/origin/".format(ARGS.workspace)):
+            # Make sure that the tmp dir exists
+            sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
+
+        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
                        "GLUON_SITEDIR="+ARGS.workspace,
                        "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
                                                        ARGS.build_number,
@@ -160,85 +196,55 @@ def build():
                        "GLUON_BRANCH="+DEFAULTS['branch'],
                        "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
                        "GLUON_TARGET="+target,
-                       "all"])
+                       "manifest"])
+        if build_errors["number"] > 0:
+            print("=============================")
+            print("Error: We have {} Build errors".format(build_errors["number"]))
+            for error in build_errors["errors"]:
+                print("-------------------------")
+                print(error)
+                print("-------------------------")
+            print("=============================")
+            exit(1)
 
-    print("Info: Generating buid.json")
-    time_stamp_sec = time.time()
-    time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
-    data = {
-        'build_date' : time_stamp,
-        'release' : "{}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                      ARGS.build_number),
-        'branch' : DEFAULTS['branch'],
-        'commit' : ARGS.commit
-    }
-    with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
-        json.dump(data, file)
+    def sign(self):
+        """
+        Signs the manifest
+        """
+        sp.check_call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
+                       "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace,
+                                                                        DEFAULTS['branch'])])
 
-    # Create manifest
-    print("Createing Manifest ...")
+    def publish(self):
+        """
+        Copy the images to a public directory
+        """
+        try:
+            directory = str(ARGS.directory)
+        except ValueError:
+            raise ValueError("You need to provide a valid path eg. -d /var/www/firmware")
+        if os.path.isdir(directory):
+            # direcotry/BRANCH/build.json
+            if os.path.isdir("{}/{}".format(directory, DEFAULTS['branch'])):
 
-    if not os.path.isdir("{}/tmp/origin/".format(ARGS.workspace)):
-        # Make sure that the tmp dir exists
-        sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
+                print("Detected old builds move to archive")
+                dir_source = "{}/{}".format(directory, DEFAULTS['branch'])
 
-    sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                   "GLUON_SITEDIR="+ARGS.workspace,
-                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
-                                                   ARGS.build_number,
-                                                   DEFAULTS['branch']),
-                   "GLUON_BRANCH="+DEFAULTS['branch'],
-                   "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                   "GLUON_TARGET="+target,
-                   "manifest"])
-    if build_errors["number"] > 0:
-        print("=============================")
-        print("Error: We have {} Build errors".format(build_errors["number"]))
-        for error in build_errors["errors"]:
-            print("-------------------------")
-            print(error)
-            print("-------------------------")
-        print("=============================")
-        exit(1)
+                with open(dir_source+"/build.json") as file:
+                    old_build_date = json.load(file)["build_date"]
+                dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
+                sp.check_call(["mkdir", "-p", dir_target])
+                sp.check_call(["rsync", "-Ltr", "--remove-source-files", dir_source, dir_target])
 
-def sign():
-    """
-    Signs the manifest
-    """
-    sp.check_call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
-                   "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace,
-                                                                    DEFAULTS['branch'])])
+            dir_source = "{}/output/images/".format(ARGS.workspace)
+            dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
+            sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
 
-def publish():
-    """
-    Copy the images to a public directory
-    """
-    try:
-        directory = str(ARGS.directory)
-    except ValueError:
-        raise ValueError("You need to provide a valid path eg. -d /var/www/firmware")
-    if os.path.isdir(directory):
-        # direcotry/BRANCH/build.json
-        if os.path.isdir("{}/{}".format(directory, DEFAULTS['branch'])):
-
-            print("Detected old builds move to archive")
-            dir_source = "{}/{}".format(directory, DEFAULTS['branch'])
-
-            with open(dir_source+"/build.json") as file:
-                old_build_date = json.load(file)["build_date"]
-            dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
-            sp.check_call(["mkdir", "-p", dir_target])
-            sp.check_call(["rsync", "-Ltr", "--remove-source-files", dir_source, dir_target])
-
-        dir_source = "{}/output/images/".format(ARGS.workspace)
-        dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
-        sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
-
-        print("delete images in workdir...")
-        sp.check_call(["rm", "-rf", dir_source])
-    else:
-        raise ValueError("{} Path does not exist!".format(directory))
-    #clean()
+            print("delete images in workdir...")
+            sp.check_call(["rm", "-rf", dir_source])
+        else:
+            raise ValueError("{} Path does not exist!".format(directory))
+        #clean()
 
 def main():
     """
