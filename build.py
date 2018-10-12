@@ -9,7 +9,7 @@ Web: https://freifunk-suedholstein.de
 import argparse
 import json
 import os
-import time
+
 from datetime import datetime
 import subprocess as sp
 
@@ -65,31 +65,33 @@ ARGS = PARSER.parse_args()
 
 class Builder():
     """docstring for Builder"""
-    def __init__(self, arg):
+
+    # pylint: disable=too-many-instance-attributes
+    # go home pylint i need the attributes
+
+    def __init__(self, build_env, firmware_release):
         super().__init__()
-        self.arg = arg
+
+        # build_env
+        self.site_path = build_env["site_path"]
+        self.gluon_path = build_env["gluon_path"]
+        self.cores = build_env["cores"]
+        self.log_level = build_env["log_level"]
+
+        # firmware_release
+        self.release = firmware_release["release"]
+        self.build_number = firmware_release["build_number"]
+        self.targets = firmware_release["targets"]
+        self.branch = firmware_release["branch"]
 
     def clean(self):
         """
         Cleans the output Directory. Not necessary!
         """
-        try:
-            target = str(ARGS.target)
-            print(target+" "+type(target))
-            all_targets = False
-        except TypeError:
-            all_targets = True
-
-        if all_targets:
-            for target in DEFAULTS["targets"]:
-                print("Cleaning target: {}".format(target))
-                sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                               "GLUON_SITEDIR="+ARGS.workspace,
-                               "GLUON_TARGET="+target,
-                               "clean"])
-        else:
-            sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                           "GLUON_SITEDIR="+ARGS.workspace,
+        for target in self.targets:
+            print("Cleaning target: {}".format(target))
+            sp.check_call(["make", "-C", self.gluon_path,
+                           "GLUON_SITEDIR="+self.site_path,
                            "GLUON_TARGET="+target,
                            "clean"])
 
@@ -98,8 +100,8 @@ class Builder():
         Clean with dirclean
         """
         print("Starting dirclean ...")
-        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                       "GLUON_SITEDIR="+ARGS.workspace,
+        sp.check_call(["make", "-C", self.gluon_path,
+                       "GLUON_SITEDIR="+self.site_path,
                        "dirclean"])
         print("dirclean done.")
 
@@ -108,8 +110,8 @@ class Builder():
         Updates the repository
         """
         print("Starting update ...")
-        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                       "GLUON_SITEDIR="+ARGS.workspace,
+        sp.check_call(["make", "-C", self.gluon_path,
+                       "GLUON_SITEDIR="+self.site_path,
                        "update"])
         print("Update done.")
 
@@ -120,57 +122,35 @@ class Builder():
         """
         print("Info: Starting building ...")
         print("Info: delete OLD images in workdir...")
-        dir_source = "{}/output/images/".format(ARGS.workspace)
+        dir_source = "{}/output/images/".format(self.site_path)
         sp.check_call(["rm", "-rf", dir_source])
         build_errors = {
             "number": 0,
             "errors": []
         }
-        if ARGS.target is not None:
-            all_targets = False
-            target = str(ARGS.target)
-            print("Info: single target found")
-        else:
-            all_targets = True
-            print("Info: build all Targets")
 
-        if all_targets:
-            for target in DEFAULTS["targets"]:
-                print("Info: Building target: {}".format(target))
-                try:
-                    sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
-                                   ARGS.workspace+DEFAULTS['gluon_dir'],
-                                   DEFAULTS['make_loglevel'],
-                                   "GLUON_SITEDIR="+ARGS.workspace,
-                                   "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
-                                                                   ARGS.build_number,
-                                                                   DEFAULTS['branch']),
-                                   "GLUON_BRANCH="+DEFAULTS['branch'],
-                                   "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                                   "GLUON_TARGET="+target,
-                                   "all"])
-                except sp.CalledProcessError as process_error:
-                    print(process_error)
-                    build_errors["errors"].append(process_error)
-                    build_errors["number"] += 1
 
-        else:
+        for target in self.targets:
             print("Info: Building target: {}".format(target))
-            sp.check_call(["make", "-j", DEFAULTS['make_cores'], "-C",
-                           ARGS.workspace+DEFAULTS['gluon_dir'],
-                           DEFAULTS['make_loglevel'],
-                           "GLUON_SITEDIR="+ARGS.workspace,
-                           "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
-                                                           ARGS.build_number,
-                                                           DEFAULTS['branch']),
-                           "GLUON_BRANCH="+DEFAULTS['branch'],
-                           "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                           "GLUON_TARGET="+target,
-                           "all"])
+            try:
+                sp.check_call(["make", "-j", self.cores, "-C",
+                               self.gluon_path,
+                               self.log_level,
+                               "GLUON_SITEDIR="+self.site_path,
+                               "GLUON_RELEASE={}-{}-{}".format(self.release,
+                                                               self.build_number,
+                                                               self.branch),
+                               "GLUON_BRANCH="+self.branch,
+                               "GLUON_OUTPUTDIR={}/output".format(self.site_path),
+                               "GLUON_TARGET="+target,
+                               "all"])
+            except sp.CalledProcessError as process_error:
+                print(process_error)
+                build_errors["errors"].append(process_error)
+                build_errors["number"] += 1
 
         print("Info: Generating buid.json")
-        time_stamp_sec = time.time()
-        time_stamp = datetime.fromtimestamp(time_stamp_sec).strftime('%Y-%m-%d-%H-%M-%S')
+        time_stamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
         data = {
             'build_date' : time_stamp,
             'release' : "{}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
