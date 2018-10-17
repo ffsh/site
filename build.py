@@ -84,6 +84,11 @@ class Builder():
         self.targets = firmware_release["targets"]
         self.branch = firmware_release["branch"]
 
+        if build_env["make_mode"]:
+            self.make_mode = sp.DEVNULL
+        else:
+            self.make_mode = sp.STDOUT
+
     def clean(self):
         """
         Cleans the output Directory. Not necessary!
