@@ -73,6 +73,9 @@ PARSER.add_argument("--cores", metavar="Cores", dest="cores",
                     help="build.py --cores 4", required=False)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
                     help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
+                    required=True)
+PARSER.add_argument("--silent", action='store_true',
+                    help="build.py --silent",
                     required=False)
 
 
@@ -85,7 +88,7 @@ class Builder():
     # pylint: disable=too-many-instance-attributes
     # go home pylint i need the attributes
 
-    def __init__(self, build_env, firmware_release, publish_dir=""):
+    def __init__(self, build_env, firmware_release, publish_dir="", dump_all=False):
         super().__init__()
 
         # build_env
@@ -94,7 +97,7 @@ class Builder():
         self.cores = build_env["cores"]
         self.log_level = build_env["log_level"]
 
-        if build_env["make_mode"]:
+        if build_env["silent_mode"]:
             self.make_mode = sp.DEVNULL
         else:
             self.make_mode = sp.STDOUT
@@ -109,8 +112,11 @@ class Builder():
 
         self.publish_dir = publish_dir
 
-
-
+        if dump_all:
+            print(json.dumps(build_env, indent=2))
+            print(self.gluon_path)
+            print(json.dumps(firmware_release, indent=2))
+            print(publish_dir)
     def clean(self):
         """
         Cleans the output Directory. Not necessary!
@@ -170,7 +176,9 @@ class Builder():
                                "GLUON_BRANCH="+self.branch,
                                "GLUON_OUTPUTDIR={}/output".format(self.site_path),
                                "GLUON_TARGET="+target,
-                               "all"])
+                               "all"],
+                              stderr=self.make_mode)
+
             except sp.CalledProcessError as process_error:
                 print(process_error)
                 build_errors["errors"].append(process_error)
@@ -250,6 +258,8 @@ def main():
     build_env["cores"] = ARGS.cores
     build_env["log_level"] = ARGS.log
 
+    build_env["silent_mode"] = ARGS.silent
+
     if ARGS.cores is not None:
         print("INFO: Cores = {}".format(ARGS.cores))
         build_env["cores"] = ARGS.cores
@@ -275,7 +285,8 @@ def main():
 
     # check for single target build
     if ARGS.target is not None:
-        firmware_release["targets"] = ARGS.target
+        print("INFO: Single target: {}".format(ARGS.target))
+        firmware_release["targets"] = [ARGS.target]
     else:
         firmware_release["targets"] = DEFAULT["targets"]
 
@@ -297,7 +308,7 @@ def main():
         publish_dir = ""
 
     # configs done; start builder
-    builder = Builder(build_env, firmware_release, publish_dir)
+    builder = Builder(build_env, firmware_release, publish_dir, dump_all=True)
 
     if ARGS.command == "clean":
         builder.clean()
