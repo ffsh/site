@@ -13,6 +13,22 @@ import os
 from datetime import datetime
 import subprocess as sp
 
+DEFAULT = {
+    'targets' : ['ar71xx-generic',
+                 'ar71xx-tiny',
+                 'ar71xx-nand',
+                 'brcm2708-bcm2708',
+                 'brcm2708-bcm2709',
+                 'mpc85xx-generic',
+                 'ramips-mt7621',
+                 'x86-generic',
+                 'x86-geode',
+                 'x86-64',
+                 'ramips-mt7620',
+                 'ramips-rt305x'
+                ]}
+
+"""
 DEFAULTS = {
     'targets' : ['ar71xx-generic',
                  'ar71xx-tiny',
@@ -33,7 +49,7 @@ DEFAULTS = {
     'release': '2018.1',
     'priority': 1,
     'branch': 'dev'
-}
+}"""
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument("-c", metavar="Command", dest="command",
@@ -69,25 +85,31 @@ class Builder():
     # pylint: disable=too-many-instance-attributes
     # go home pylint i need the attributes
 
-    def __init__(self, build_env, firmware_release):
+    def __init__(self, build_env, firmware_release, publish_dir=""):
         super().__init__()
 
         # build_env
         self.site_path = build_env["site_path"]
-        self.gluon_path = build_env["gluon_path"]
+        self.gluon_path = self.site_path+"/gluon"
         self.cores = build_env["cores"]
         self.log_level = build_env["log_level"]
+
+        if build_env["make_mode"]:
+            self.make_mode = sp.DEVNULL
+        else:
+            self.make_mode = sp.STDOUT
 
         # firmware_release
         self.release = firmware_release["release"]
         self.build_number = firmware_release["build_number"]
         self.targets = firmware_release["targets"]
         self.branch = firmware_release["branch"]
+        self.commit = firmware_release["commit"]
+        self.secret = firmware_release["secret"]
 
-        if build_env["make_mode"]:
-            self.make_mode = sp.DEVNULL
-        else:
-            self.make_mode = sp.STDOUT
+        self.publish_dir = publish_dir
+
+
 
     def clean(self):
         """
@@ -158,30 +180,21 @@ class Builder():
         time_stamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
         data = {
             'build_date' : time_stamp,
-            'release' : "{}-{}-{}".format(DEFAULTS['release'], DEFAULTS['branch'],
-                                          ARGS.build_number),
-            'branch' : DEFAULTS['branch'],
-            'commit' : ARGS.commit
+            'release' : "{}-{}-{}".format(self.release, self.branch,
+                                          self.build_number),
+            'branch' : self.branch,
+            'commit' : self.commit
         }
-        with open("{}/output/images/build.json".format(ARGS.workspace), "w") as file:
+        with open("{}/output/images/build.json".format(self.site_path), "w") as file:
             json.dump(data, file)
 
         # Create manifest
         print("Createing Manifest ...")
 
-        if not os.path.isdir("{}/tmp/origin/".format(ARGS.workspace)):
+        if not os.path.isdir("{}/tmp/origin/".format(self.site_path)):
             # Make sure that the tmp dir exists
-            sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(ARGS.workspace)])
+            sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(self.site_path)])
 
-        sp.check_call(["make", "-C", ARGS.workspace+DEFAULTS['gluon_dir'],
-                       "GLUON_SITEDIR="+ARGS.workspace,
-                       "GLUON_RELEASE={}-{}-{}".format(DEFAULTS['release'],
-                                                       ARGS.build_number,
-                                                       DEFAULTS['branch']),
-                       "GLUON_BRANCH="+DEFAULTS['branch'],
-                       "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
-                       "GLUON_TARGET="+target,
-                       "manifest"])
         if build_errors["number"] > 0:
             print("=============================")
             print("Error: We have {} Build errors".format(build_errors["number"]))
@@ -196,78 +209,108 @@ class Builder():
         """
         Signs the manifest
         """
-        sp.check_call(["{}/gluon/contrib/sign.sh".format(ARGS.workspace), ARGS.secret,
-                       "{}/output/images/sysupgrade/{}.manifest".format(ARGS.workspace,
-                                                                        DEFAULTS['branch'])])
+        sp.check_call(["{}/gluon/contrib/sign.sh".format(self.site_path), self.secret,
+                       "{}/output/images/sysupgrade/{}.manifest".format(self.site_path, self.branch)])
 
     def publish(self):
         """
         Copy the images to a public directory
         """
-        try:
-            directory = str(ARGS.directory)
-        except ValueError:
-            raise ValueError("You need to provide a valid path eg. -d /var/www/firmware")
-        if os.path.isdir(directory):
+
+        if os.path.isdir(self.publish_dir):
             # direcotry/BRANCH/build.json
-            if os.path.isdir("{}/{}".format(directory, DEFAULTS['branch'])):
+            if os.path.isdir("{}/{}".format(self.publish_dir, self.branch)):
 
                 print("Detected old builds move to archive")
-                dir_source = "{}/{}".format(directory, DEFAULTS['branch'])
+                dir_source = "{}/{}".format(self.publish_dir, self.branch)
 
                 with open(dir_source+"/build.json") as file:
                     old_build_date = json.load(file)["build_date"]
-                dir_target = "{}/archive/{}-{}".format(directory, DEFAULTS['branch'], old_build_date)
+                dir_target = "{}/archive/{}-{}".format(self.publish_dir, self.branch, old_build_date)
                 sp.check_call(["mkdir", "-p", dir_target])
                 sp.check_call(["rsync", "-Ltr", "--remove-source-files", dir_source, dir_target])
 
             dir_source = "{}/output/images/".format(ARGS.workspace)
-            dir_target = "{}/{}".format(directory, DEFAULTS['branch'])
+            dir_target = "{}/{}".format(self.publish_dir, self.branch)
             sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
 
             print("delete images in workdir...")
             sp.check_call(["rm", "-rf", dir_source])
         else:
-            raise ValueError("{} Path does not exist!".format(directory))
+            raise ValueError("{} Path does not exist!".format(self.publish_dir))
         #clean()
 
 def main():
     """
     Entry function
     """
-    global DEFAULTS
-    with open(ARGS.workspace + '/release.json', 'r') as file:
-        data = json.load(file)
-        DEFAULTS['release'] = data['version']
-        DEFAULTS['priority'] = data['priority']
+    # Create build configuration
+    build_env = {}
+    build_env["site_path"] = ARGS.workspace
+    build_env["cores"] = ARGS.cores
+    build_env["log_level"] = ARGS.log
 
     if ARGS.cores is not None:
         print("INFO: Cores = {}".format(ARGS.cores))
-        DEFAULTS['make_cores'] = ARGS.cores
+        build_env["cores"] = ARGS.cores
 
     if ARGS.log is not None:
         print("INFO: Log = {}".format(ARGS.log))
-        DEFAULTS['make_loglevel'] = ARGS.log
+        build_env["log_level"] = ARGS.log
 
+
+
+    # Create firmware configuration
+    firmware_release = {}
+
+    firmware_release["secret"] = ARGS.secret
+
+    # parse release.json
+    with open(build_env["site_path"] + '/release.json', 'r') as file:
+        data = json.load(file)
+        firmware_release["release"] = data['version']
+        # currently not used
+        # firmware_release["priority"] = data['priority']
+    firmware_release["build_number"] = ARGS.build_number
+
+    # check for single target build
+    if ARGS.target is not None:
+        firmware_release["targets"] = ARGS.target
+    else:
+        firmware_release["targets"] = DEFAULT["targets"]
+
+    # FIX branch name
     if "/" in ARGS.branch:
-        DEFAULTS['branch'] = ARGS.branch.split("/")[1]
-        print("Warning: found \"/\" in branch name, changing to: {}".format(DEFAULTS['branch']))
+        firmware_release["branch"] = ARGS.branch.split("/")[1]
+        print("Warning: found \"/\" in branch name, changing to: {}".format(firmware_release["branch"]))
     elif ARGS.branch is not None:
-        DEFAULTS['branch'] = ARGS.branch
-        print("Info: branch switched to: {}".format(DEFAULTS['branch']))
+        firmware_release["branch"] = ARGS.branch
+        print("Info: branch switched to: {}".format(firmware_release["branch"]))
+
+    firmware_release["commit"] = ARGS.commit
+
+    # publish config
+
+    if ARGS.directory is not None:
+        publish_dir = ARGS.directory
+    else:
+        publish_dir = ""
+
+    # configs done; start builder
+    builder = Builder(build_env, firmware_release, publish_dir)
 
     if ARGS.command == "clean":
-        clean()
+        builder.clean()
     elif ARGS.command == "dirclean":
-        dirclean()
+        builder.dirclean()
     elif ARGS.command == "update":
-        update()
+        builder.update()
     elif ARGS.command == "build":
-        build()
+        builder.build()
     elif ARGS.command == "sign":
-        sign()
+        builder.sign()
     elif ARGS.command == "publish":
-        publish()
+        builder.publish()
     else:
         raise ValueError("Command can only be one of: clean |"+
                          " dirclean | update | build | sign | publish")
