@@ -203,6 +203,15 @@ class Builder():
             # Make sure that the tmp dir exists
             sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(self.site_path)])
 
+        sp.check_call(["make", "-C", self.gluon_path,
+                       "GLUON_SITEDIR="+ARGS.workspace,
+                       "GLUON_RELEASE={}-{}-{}".format(self.release,
+                                                       ARGS.build_number,
+                                                       self.branch),
+                       "GLUON_BRANCH="+self.branch,
+                       "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                       "manifest"])
+
         if build_errors["number"] > 0:
             print("=============================")
             print("Error: We have {} Build errors".format(build_errors["number"]))
