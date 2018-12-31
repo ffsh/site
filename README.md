@@ -10,10 +10,10 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 
 | branch  | gluon-branch    | Kommentar                                          |
 |---------|-----------------|----------------------------------------------------|
-| dev     | master          | Nur für Entwickler enthält experimentelle Software |
-| testing | v2018.1.x       | Zum testen einer neuen Version für interessierte.  |
-| rc      | v2018.1.3       | Zum erneuten testen (in einer größeren Gruppe)     |
-| stable  | v2018.1.3       | Für alle anderen, **empfohlene** Version           |
+| dev     | v2018.2.x       | Nur für Entwickler enthält experimentelle Software |
+| testing | v2018.2.x       | Zum testen einer neuen Version für interessierte.  |
+| rc      | v2018.2         | Zum erneuten testen (in einer größeren Gruppe)     |
+| stable  | v2018.2         | Für alle anderen, **empfohlene** Version           |
 
 
 ## Jenkins
