@@ -21,10 +21,13 @@ DEFAULT = {
                  'brcm2708-bcm2709',
                  'mpc85xx-generic',
                  'ramips-mt7621',
+                 'sunxi-cortexa7'
                  'x86-generic',
                  'x86-geode',
                  'x86-64',
+                 'ipq40xx',
                  'ramips-mt7620',
+                 'ramips-mt76x8',
                  'ramips-rt305x'
                 ]}
 
