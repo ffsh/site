@@ -21,37 +21,15 @@ DEFAULT = {
                  'brcm2708-bcm2709',
                  'mpc85xx-generic',
                  'ramips-mt7621',
-                 'sunxi',
+                 'sunxi-cortexa7',
                  'x86-generic',
                  'x86-geode',
                  'x86-64',
+                 'ipq40xx',
                  'ramips-mt7620',
-                 'ramips-mt7628',
+                 'ramips-mt76x8',
                  'ramips-rt305x'
                 ]}
-
-"""
-DEFAULTS = {
-    'targets' : ['ar71xx-generic',
-                 'ar71xx-tiny',
-                 'ar71xx-nand',
-                 'brcm2708-bcm2708',
-                 'brcm2708-bcm2709',
-                 'mpc85xx-generic',
-                 'ramips-mt7621',
-                 'x86-generic',
-                 'x86-geode',
-                 'x86-64',
-                 'ramips-mt7620',
-                 'ramips-rt305x'
-                ],
-    'gluon_dir': '/gluon',
-    'make_cores' : "1",
-    'make_loglevel': 'V=s',
-    'release': '2018.1',
-    'priority': 1,
-    'branch': 'dev'
-}"""
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument("-c", metavar="Command", dest="command",
@@ -319,7 +297,7 @@ def main():
         publish_dir = ""
 
     # configs done; start builder
-    builder = Builder(build_env, firmware_release, publish_dir, dump_all=True)
+    builder = Builder(build_env, firmware_release, publish_dir, dump_all=False)
 
     if ARGS.command == "clean":
         builder.clean()
