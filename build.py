@@ -50,10 +50,10 @@ PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
                     help="build.py --commit sha", required=True)
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
-                    help="build.py --cores 4", required=True)
+                    help="build.py --cores 4", required=False, default=1)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
                     help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
-                    required=True)
+                    required=False, default="V=w")
 PARSER.add_argument("--silent", action='store_true',
                     help="build.py --silent",
                     required=False)
