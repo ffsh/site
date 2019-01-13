@@ -50,7 +50,7 @@ PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
                     help="build.py --commit sha", required=True)
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
-                    help="build.py --cores 4", required=False)
+                    help="build.py --cores 4", required=True)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
                     help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
                     required=True)
@@ -186,7 +186,7 @@ class Builder():
 
         sp.check_call(["make", "-C", self.gluon_path,
                        "GLUON_SITEDIR="+self.site_path,
-                       "GLUON_PRIORITY="+self.priority,
+                       "GLUON_PRIORITY={}".format(self.priority),
                        "GLUON_RELEASE={}-{}-{}".format(self.release,
                                                        self.build_number,
                                                        self.branch),
