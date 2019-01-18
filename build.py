@@ -50,10 +50,10 @@ PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
                     help="build.py --commit sha", required=True)
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
-                    help="build.py --cores 4", required=False)
+                    help="build.py --cores 4", required=False, default=1)
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
                     help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
-                    required=True)
+                    required=False, default="V=w")
 PARSER.add_argument("--silent", action='store_true',
                     help="build.py --silent",
                     required=False)
@@ -89,6 +89,7 @@ class Builder():
         self.branch = firmware_release["branch"]
         self.commit = firmware_release["commit"]
         self.secret = firmware_release["secret"]
+        self.priority = firmware_release["priority"]
 
         self.publish_dir = publish_dir
 
@@ -184,12 +185,13 @@ class Builder():
             sp.check_call(["mkdir", "-p", "{}/tmp/origin/".format(self.site_path)])
 
         sp.check_call(["make", "-C", self.gluon_path,
-                       "GLUON_SITEDIR="+ARGS.workspace,
+                       "GLUON_SITEDIR="+self.site_path,
+                       "GLUON_PRIORITY={}".format(self.priority),
                        "GLUON_RELEASE={}-{}-{}".format(self.release,
-                                                       ARGS.build_number,
+                                                       self.build_number,
                                                        self.branch),
                        "GLUON_BRANCH="+self.branch,
-                       "GLUON_OUTPUTDIR={}/output".format(ARGS.workspace),
+                       "GLUON_OUTPUTDIR={}/output".format(self.site_path),
                        "manifest"])
 
         if build_errors["number"] > 0:
@@ -227,7 +229,7 @@ class Builder():
                 sp.check_call(["mkdir", "-p", dir_target])
                 sp.check_call(["rsync", "-Ltr", "--remove-source-files", dir_source, dir_target])
 
-            dir_source = "{}/output/images/".format(ARGS.workspace)
+            dir_source = "{}/output/images/".format(self.site_path)
             dir_target = "{}/{}".format(self.publish_dir, self.branch)
             sp.check_call(["rsync", "-Ltr", dir_source, dir_target])
 
@@ -268,8 +270,7 @@ def main():
     with open(build_env["site_path"] + '/release.json', 'r') as file:
         data = json.load(file)
         firmware_release["release"] = data['version']
-        # currently not used
-        # firmware_release["priority"] = data['priority']
+        firmware_release["priority"] = data['priority']
     firmware_release["build_number"] = ARGS.build_number
 
     # check for single target build
