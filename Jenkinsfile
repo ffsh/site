@@ -10,6 +10,7 @@ pipeline {
         stage('Git checkout'){
             steps{
                 sh "git checkout ${BRANCH}"
+                sh "git submodule update"
                 sh "./build.py -c update -b ${BRANCH} -n ${BUILD_NUMBER} -w ${WORKSPACE} --commit ${GIT_COMMIT} --log 'V=w'"
             }
         }
