@@ -10,19 +10,14 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 
 | branch  | gluon-branch    | Kommentar                                          |
 |---------|-----------------|----------------------------------------------------|
-| dev     | v2018.2.x       | Nur für Entwickler enthält experimentelle Software |
-| testing | v2018.2.x       | Zum testen einer neuen Version für interessierte.  |
-| rc      | v2018.2.2       | Zum erneuten testen (in einer größeren Gruppe)     |
-| stable  | v2018.2.2       | Für alle anderen, **empfohlene** Version           |
+| dev     | mater           | Nur für Entwickler enthält experimentelle Software |
+| testing | v2019.1.x       | Zum testen einer neuen Version für interessierte.  |
+| rc      | v2019.1         | Zum erneuten testen (in einer größeren Gruppe)     |
+| stable  | v2019.1         | Für alle anderen, **empfohlene** Version           |
 
 
 ## Jenkins
-Die Firmware wird automatisch mit der Hilfe von build.py gebaut. Sobald ein commit in das Repository gepusht wird informiert GitHub die Jenkins Instaz über die Änderung und Jenkins prüft ob ein build notwendig ist.
-Wenn du änderungen am Repository machen willst die keinen build auslösen sollen (dieser benötigt 1-3 Stunden) dann kannst du deiner Commit Message ein [NO-BUILD] als Prefix verpassen.
-```
-git commit -m "[NO-BUILD] änderungen am changelog"
 
-```
 Den aktuellen build Status siehst du oben in dieser README oder du gehst auf [jenkins.grotax.de](https://jenkins.grotax.de). Wenn der Build erfolgreich war, werden die images auf [firmware.grotax.de](https://firmware.grotax.de) veröffentlicht. Diese sind jedoch nicht für das automatische Update freigegeben.
 
 ## Firmware selber bauen:
@@ -31,8 +26,6 @@ Für das bauen der Firmware haben wir ein Python Script. Dadurch können wir die
 Das script kann aber auch zum manuellen bauen genutzt werden. Ein Beispiel findet sich weiter unten.
 
 ### build.py Argumente:
-
-Hier werden alle verfügbaren Befehle des Scripts erläutert.
 
 | command | value    | make "equivalent" | Kommentar                                       |
 |---------|----------|-------------------|-------------------------------------------------|

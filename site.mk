@@ -6,7 +6,6 @@ GLUON_FEATURES := \
     mesh-batman-adv-15 \
     mesh-vpn-fastd \
     web-mesh-vpn-fastd \
-    radvd \
     radv-filterd \
     respondd \
     status-page \
@@ -15,28 +14,22 @@ GLUON_FEATURES := \
     web-private-wifi \
     config-mode-domain-select
 
-
 GLUON_SITE_PACKAGES := \
     iwinfo \
     haveged
 
 GLUON_MULTIDOMAIN=1
 
-ifeq ($(GLUON_TARGET),ar71xx-generic)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
-endif
+DEFAULT_GLUON_RELEASE := 2019.1.x-$(shell date '+%Y%m%d')
+GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
-ifeq ($(GLUON_TARGET),ar71xx-tiny)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
-endif
+GLUON_PRIORITY ?= 0
 
-ifeq ($(GLUON_TARGET),ar71xx-nand)
-GLUON_SITE_PACKAGES += \
-    gluon-ssid-changer
-endif
+GLUON_LANGS ?= en de
+GLUON_REGION ?= eu
+GLUON_WLAN_MESH = 11s
 
+GLUON_DEPRECATED ?= upgrade
 
 # add addition network drivers and usb stuff only to targes where disk space does not matter.
 ifeq ($(GLUON_TARGET),x86-generic)
@@ -92,21 +85,3 @@ GLUON_SITE_PACKAGES += \
     kmod-usb-net-asix \
     kmod-usb-net-dm9601-ether
 endif
-
-DEFAULT_GLUON_RELEASE := 2018.2.x-$(shell date '+%Y%m%d')
-
-GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
-
-#GLUON_BRANCH ?= testing
-#export GLUON_BRANCH
-
-#GLUON_TARGET ?= ar71xx-generic
-#export GLUON_TARGET
-
-# Default priority for updates.
-GLUON_PRIORITY ?= 0
-
-# Languages to include
-GLUON_LANGS ?= en de
-GLUON_REGION ?= eu
-GLUON_WLAN_MESH = 11s
