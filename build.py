@@ -14,22 +14,24 @@ from datetime import datetime
 import subprocess as sp
 
 DEFAULT = {
-    'targets' : ['ar71xx-generic',
-                 'ar71xx-tiny',
-                 'ar71xx-nand',
-                 'brcm2708-bcm2708',
-                 'brcm2708-bcm2709',
-                 'mpc85xx-generic',
-                 'ramips-mt7621',
-                 'sunxi-cortexa7',
-                 'x86-generic',
-                 'x86-geode',
-                 'x86-64',
-                 'ipq40xx',
-                 'ramips-mt7620',
-                 'ramips-mt76x8',
-                 'ramips-rt305x'
-                ]}
+    'targets' : [
+        'ar71xx-generic',
+        'ar71xx-tiny',
+        'ar71xx-nand',
+        'brcm2708-bcm2708',
+        'brcm2708-bcm2709',
+        'mpc85xx-generic',
+        'mpc85xx-p1020',
+        'ramips-mt7621',
+        'sunxi-cortexa7',
+        'x86-generic',
+        'x86-geode',
+        'x86-64',
+        'ipq40xx',
+        'ramips-mt7620',
+        'ramips-mt76x8',
+        'ramips-rt305x',
+    ]}
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument("-c", metavar="Command", dest="command",
@@ -50,7 +52,7 @@ PARSER.add_argument("-d", metavar="Public Direcotry", dest="directory",
 PARSER.add_argument("--commit", metavar="Commit", dest="commit",
                     help="build.py --commit sha", required=True)
 PARSER.add_argument("--cores", metavar="Cores", dest="cores",
-                    help="build.py --cores 4", required=False, default=1)
+                    help="build.py --cores 4", required=False, default="1")
 PARSER.add_argument("--log", metavar="Log Level", dest="log",
                     help="build.py --log V=s (stdout+stderr) | V=w (warnings/errors)",
                     required=False, default="V=w")
