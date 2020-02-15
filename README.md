@@ -11,9 +11,9 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 | branch  | gluon-branch    | Kommentar                                          |
 |---------|-----------------|----------------------------------------------------|
 | dev     | master          | Nur für Entwickler enthält experimentelle Software |
-| testing | v2019.1.x       | Zum testen einer neuen Version für interessierte.  |
-| rc      | v2019.1.2       | Zum erneuten testen (in einer größeren Gruppe)     |
-| stable  | v2019.1.2       | Für alle anderen, **empfohlene** Version           |
+| testing | v2020.1.x       | Zum testen einer neuen Version für interessierte.  |
+| rc      | v2020.1         | Zum erneuten testen (in einer größeren Gruppe)     |
+| stable  | v2020.1         | Für alle anderen, **empfohlene** Version           |
 
 
 ## Jenkins
