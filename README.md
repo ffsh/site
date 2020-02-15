@@ -10,10 +10,10 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 
 | branch  | gluon-branch    | Kommentar                                          |
 |---------|-----------------|----------------------------------------------------|
-| dev     | mater           | Nur für Entwickler enthält experimentelle Software |
+| dev     | master          | Nur für Entwickler enthält experimentelle Software |
 | testing | v2019.1.x       | Zum testen einer neuen Version für interessierte.  |
-| rc      | v2019.1         | Zum erneuten testen (in einer größeren Gruppe)     |
-| stable  | v2019.1         | Für alle anderen, **empfohlene** Version           |
+| rc      | v2019.1.2       | Zum erneuten testen (in einer größeren Gruppe)     |
+| stable  | v2019.1.2       | Für alle anderen, **empfohlene** Version           |
 
 
 ## Jenkins
