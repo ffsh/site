@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
         run: sudo gluon/contrib/actions/install-dependencies.sh
       - name: Build
