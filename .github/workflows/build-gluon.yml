@@ -20,6 +20,8 @@ jobs:
         uses: textbook/git-checkout-submodule-action@master
       - name: list files
         run: ls -l && pwd
+      - name: list gluon dir
+        run: ls -l gluon
       - name: Install Dependencies
         run: sudo gluon/contrib/actions/install-dependencies.sh
       - name: Build
