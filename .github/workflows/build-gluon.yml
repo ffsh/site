@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
+      - name: list files
+        run: ls -l && pwd
       - name: Install Dependencies
         run: sudo gluon/contrib/actions/install-dependencies.sh
       - name: Build
