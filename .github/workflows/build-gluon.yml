@@ -20,20 +20,20 @@ jobs:
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
         working-directory: gluon
-        run: sudo contrib/actions/install-dependencies.sh
+        run: sudo ./contrib/actions/install-dependencies.sh
       - name: Build
-        run: echo "build" #gluon/contrib/actions/run-build.sh ar71xx-generic
+        run: ./contrib/actions/run-build.sh ar71xx-generic
       - name: Archive build logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v1
         with:
           name: ar71xx-generic_logs
-          path: openwrt/logs
+          path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
           name: ar71xx-generic_output
-          path: output
+          path: /gluon/output
 
   # ar71xx-tiny:
   #   name: ar71xx-tiny
