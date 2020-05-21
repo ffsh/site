@@ -19,7 +19,6 @@ jobs:
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
-        working-directory: gluon
         run: sudo ./actions/install-dependencies.sh
       - name: Build
         run: ./actions/run-build.sh ar71xx-generic
