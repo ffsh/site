@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "./build.py -c build -b ${BRANCH} -n ${BUILD_NUMBER} -w ${WORKSPACE} --commit ${GIT_COMMIT} --cores '9' --log 'V=w' --silent"
+                sh "./build.py -c build -b ${BRANCH} -n ${BUILD_NUMBER} -w ${WORKSPACE} --commit ${GIT_COMMIT} --cores '2' --log 'V=w' --silent"
             }
         }
         stage('Sign'){
