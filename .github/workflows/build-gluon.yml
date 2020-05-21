@@ -20,9 +20,9 @@ jobs:
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
         working-directory: gluon
-        run: sudo ./contrib/actions/install-dependencies.sh
+        run: sudo ./actions/install-dependencies.sh
       - name: Build
-        run: ./contrib/actions/run-build.sh ar71xx-generic
+        run: ./actions/run-build.sh ar71xx-generic
       - name: Archive build logs
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v1
