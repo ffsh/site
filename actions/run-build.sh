@@ -12,4 +12,4 @@ export BUILD_LOG=1
 cd gluon/
 
 make update
-make -j2 V=s
+make -j2
