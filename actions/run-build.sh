@@ -9,5 +9,7 @@ export GLUON_SITEDIR="../"
 export GLUON_TARGET=$1
 export BUILD_LOG=1
 
+cd gluon/
+
 make update
 make -j2 V=s
