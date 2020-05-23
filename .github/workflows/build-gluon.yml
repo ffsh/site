@@ -28,11 +28,13 @@ jobs:
         with:
           name: ar71xx-generic_logs
           path: gluon/openwrt/logs
+      - name: debug ls
+        run: ls -l && ls -l gluon
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
           name: ar71xx-generic_output
-          path: /gluon/output
+          path: ./gluon/output
 
   # ar71xx-tiny:
   #   name: ar71xx-tiny
