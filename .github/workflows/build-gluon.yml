@@ -6,9 +6,7 @@ name: Build Gluon
 on:
   push:
     tags:
-      - S2020.*
-      - T2020.*
-      - R2020.*
+      - 2020.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
