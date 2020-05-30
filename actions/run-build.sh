@@ -2,7 +2,7 @@
 
 set -e
 
-export GLUON_RELEASE=gluon-ffsh-2020.1.2.0
+export GLUON_RELEASE=2020.1.2.0
 
 
 export BROKEN=0

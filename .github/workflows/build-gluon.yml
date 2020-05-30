@@ -5,10 +5,8 @@
 name: Build Gluon
 on:
   push:
-    branches:
-      - testing
-      - rc
-      - stable
+    tags:
+      - 2020.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -448,29 +446,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: x86-geode_output
-          path: gluon/output
-
-  x86-legacy:
-    name: x86-legacy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
-      - name: Install Dependencies
-        run: sudo actions/install-dependencies.sh
-      - name: Build
-        run: actions/run-build.sh x86-legacy
-      - name: Archive build logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v1
-        with:
-          name: x86-legacy_logs
-          path: gluon/openwrt/logs
-      - name: Archive build output
-        uses: actions/upload-artifact@v1
-        with:
-          name: x86-legacy_output
           path: gluon/output
 
   x86-64:
