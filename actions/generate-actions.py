@@ -32,12 +32,12 @@ ACTIONS_TARGET="""
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{GITHUB_REF}}_{target_name}_logs
+          name: ${{{GITHUB_REF}}}_{target_name}_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: ${{GITHUB_REF}}_{target_name}_output
+          name: ${{{GITHUB_REF}}}_{target_name}_output
           path: gluon/output
 """
 
