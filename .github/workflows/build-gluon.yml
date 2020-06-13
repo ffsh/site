@@ -26,10 +26,10 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{$GITHUB_REF}}_ar71xx-generic_logs
+          name: ${{env.GITHUB_REF}}_ar71xx-generic_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: ${{$GITHUB_REF}}_ar71xx-generic_output
+          name: ${{env.GITHUB_REF}}_ar71xx-generic_output
           path: gluon/output
