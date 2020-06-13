@@ -3,16 +3,14 @@
 import sys
 
 ACTIONS_HEAD = """
-# Update this file after adding/removing/renaming a target by running
-# `make list-targets BROKEN=1 | ../actions/generate-actions.py > ../.github/workflows/build-gluon.yml`
+# Update this file after adding/removing/renaming a target by running the script from gluon dir
+# `make list-targets BROKEN=0 GLUON_DEPRECATED=upgrade GLUON_SITEDIR="../"| ../actions/generate-actions.py > ../.github/workflows/build-gluon.yml`
 
 name: Build Gluon
 on:
   push:
-    branches:
-      - testing
-      - rc
-      - stable
+    tags:
+      - 2020.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -34,12 +32,12 @@ ACTIONS_TARGET="""
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
         with:
-          name: {target_name}_logs
+          name: ${{GITHUB_REF}}_{target_name}_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: {target_name}_output
+          name: ${{GITHUB_REF}}_{target_name}_output
           path: gluon/output
 """
 

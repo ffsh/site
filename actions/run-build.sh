@@ -12,7 +12,12 @@ export GLUON_SITEDIR="../"
 export GLUON_TARGET=$1
 export BUILD_LOG=1
 
+# needed for manifest
+export GLUON_BRANCH="master"
+export GLUON_PRIORITY=1
+
 cd gluon/
 
 make update
 make -j2
+make manifest
