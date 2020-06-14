@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Get the version
-          id: get_version
-          run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
