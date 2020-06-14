@@ -5,8 +5,8 @@
 name: Build Gluon
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 2020.*
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Get the version
+          id: get_version
+          run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
@@ -26,10 +29,10 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{github.ref}}_ar71xx-generic_logs
+          name: ${{ steps.get_version.outputs.VERSION }}_ar71xx-generic_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: ${{github.ref}}_ar71xx-generic_output
+          name: ${{ steps.get_version.outputs.VERSION }}_ar71xx-generic_output
           path: gluon/output
