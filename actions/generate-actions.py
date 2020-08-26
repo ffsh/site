@@ -22,6 +22,9 @@ ACTIONS_TARGET="""
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${{GITHUB_REF/refs\/tags\//}}
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
@@ -32,12 +35,12 @@ ACTIONS_TARGET="""
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{{GITHUB_REF}}}_{target_name}_logs
+          name: ${{{{ steps.get_version.outputs.VERSION }}}}_{target_name}_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: ${{{GITHUB_REF}}}_{target_name}_output
+          name: ${{{{ steps.get_version.outputs.VERSION }}}}_{target_name}_output
           path: gluon/output
 """
 
