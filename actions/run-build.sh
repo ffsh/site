@@ -2,7 +2,7 @@
 
 set -e
 
-export GLUON_RELEASE=2020.1.3.0
+export GLUON_RELEASE=2020.1.4.0
 
 
 export BROKEN=0
@@ -14,7 +14,7 @@ export BUILD_LOG=1
 
 # needed for manifest
 export GLUON_BRANCH="master"
-export GLUON_PRIORITY=1
+export GLUON_PRIORITY=0
 
 cd gluon/
 
