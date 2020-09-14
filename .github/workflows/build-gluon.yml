@@ -323,32 +323,6 @@ jobs:
           name: ${{ steps.get_version.outputs.VERSION }}_mpc85xx-p1020_output
           path: gluon/output
 
-  ramips-mt7620:
-    name: ramips-mt7620
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
-      - name: Install Dependencies
-        run: sudo actions/install-dependencies.sh
-      - name: Build
-        run: actions/run-build.sh ramips-mt7620
-      - name: Archive build logs
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v1
-        with:
-          name: ${{ steps.get_version.outputs.VERSION }}_ramips-mt7620_logs
-          path: gluon/openwrt/logs
-      - name: Archive build output
-        uses: actions/upload-artifact@v1
-        with:
-          name: ${{ steps.get_version.outputs.VERSION }}_ramips-mt7620_output
-          path: gluon/output
-
   ramips-mt7621:
     name: ramips-mt7621
     runs-on: ubuntu-latest
