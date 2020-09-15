@@ -22,6 +22,14 @@ ACTIONS_TARGET="""
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        id: cache-dl
+        with:
+          path: dl_target
+          key: openwrt-dl-{target_name}-${{{{ hashFiles('modules') }}}}
+      - name: Prepare download cache
+        if: steps.cache-dl.outputs.cache-hit == 'true'
+        run: mkdir -p openwrt/dl; mv dl_target/* openwrt/dl/; ls openwrt/d
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${{GITHUB_REF/refs\/tags\//}}
@@ -31,6 +39,9 @@ ACTIONS_TARGET="""
         run: sudo actions/install-dependencies.sh
       - name: Build
         run: actions/run-build.sh {target_name}
+      - name: Create cache to save
+        if: steps.cache-dl.outputs.cache-hit != 'true'
+        run: mkdir dl_target; mv openwrt/dl/* dl_target/; find dl_target/ -size +20M -delete
       - name: Archive build logs
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
