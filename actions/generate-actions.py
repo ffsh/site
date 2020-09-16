@@ -29,7 +29,7 @@ ACTIONS_TARGET="""
           key: openwrt-dl-{target_name}-${{{{ hashFiles('modules') }}}}
       - name: Prepare download cache
         if: steps.cache-dl.outputs.cache-hit == 'true'
-        run: mkdir -p openwrt/dl; mv dl_target/* openwrt/dl/; ls openwrt/d
+        run: mkdir -p gluon/openwrt/dl; mv dl_target/* gluon/openwrt/dl/; ls gluon/openwrt/dl
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${{GITHUB_REF/refs\/tags\//}}
@@ -41,7 +41,7 @@ ACTIONS_TARGET="""
         run: actions/run-build.sh {target_name}
       - name: Create cache to save
         if: steps.cache-dl.outputs.cache-hit != 'true'
-        run: mkdir dl_target; mv openwrt/dl/* dl_target/; find dl_target/ -size +20M -delete
+        run: mkdir dl_target; mv gluon/openwrt/dl/* dl_target/; find dl_target/ -size +20M -delete
       - name: Archive build logs
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
