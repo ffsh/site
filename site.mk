@@ -16,11 +16,10 @@ GLUON_FEATURES := \
 
 GLUON_SITE_PACKAGES := \
     iwinfo \
-    haveged
 
 GLUON_MULTIDOMAIN=1
 
-DEFAULT_GLUON_RELEASE := 2019.1.x-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 2020.2.1.0-$(shell date '+%Y%m%d')
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
 GLUON_PRIORITY ?= 0
