@@ -52,7 +52,7 @@ GLUON_SITE_PACKAGES += \
     kmod-usb-net-dm9601-ether
 endif
 
-# Add offline ssid, network drivers and usb stuff to raspberry and banana pi images
+# Add network drivers and usb stuff to raspberry and banana pi images
 
 ifeq ($(GLUON_TARGET),brcm2708-bcm2708)
 GLUON_SITE_PACKAGES += \
