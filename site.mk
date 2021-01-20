@@ -17,9 +17,12 @@ GLUON_FEATURES := \
 GLUON_SITE_PACKAGES := \
     iwinfo \
 
+GLUON_SITE_PACKAGES_standard := \
+    respondd-module-airtime \
+
 GLUON_MULTIDOMAIN=1
 
-DEFAULT_GLUON_RELEASE := 2020.2.1.0-$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 1.1.1-$(shell date '+%Y%m%d')
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
 GLUON_PRIORITY ?= 0
