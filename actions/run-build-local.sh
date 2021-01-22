@@ -2,7 +2,7 @@
 
 set -e
 
-export GLUON_RELEASE=2020.1.2.0
+export GLUON_RELEASE=2020.2.2.1
 
 
 export BROKEN=0
@@ -13,8 +13,10 @@ export BUILD_LOG=1
 
 cd gluon/
 
-#make update
+make update
 
-for TARGET in $(make list-targets); do
-    make -j13 GLUON_TARGET=$TARGET
-done
+make -j1 V=s GLUON_TARGET=ar71xx-generic
+
+#for TARGET in $(make list-targets); do
+#    make -j1 V=s GLUON_TARGET=$TARGET
+#done
