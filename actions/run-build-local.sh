@@ -2,7 +2,7 @@
 
 set -e
 
-export GLUON_RELEASE=2020.2.2.2
+export GLUON_RELEASE=2020.2.2.3
 
 
 export BROKEN=0
