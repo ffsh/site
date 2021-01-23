@@ -2,7 +2,7 @@
 
 import sys
 
-ACTIONS_HEAD = """
+ACTIONS = """
 # Update this file after adding/removing/renaming a target by running the script from gluon dir
 # `make list-targets BROKEN=0 GLUON_DEPRECATED=upgrade GLUON_SITEDIR="../"| ../actions/generate-actions.py > ../.github/workflows/build-gluon.yml`
 
@@ -14,11 +14,11 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-"""
-
-ACTIONS_TARGET="""
-  {target_name}:
-    name: {target_name}
+  build_firmware:
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [{matrix}]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -30,23 +30,23 @@ ACTIONS_TARGET="""
       - name: Install Dependencies
         run: sudo actions/install-dependencies.sh
       - name: Build
-        run: actions/run-build.sh {target_name}
+        run: actions/run-build.sh ${{{{matrix.target}}}}
       - name: Archive build logs
         if: ${{{{ !cancelled() }}}}
         uses: actions/upload-artifact@v1
         with:
-          name: ${{{{ steps.get_version.outputs.VERSION }}}}_{target_name}_logs
+          name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_logs
           path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v1
         with:
-          name: ${{{{ steps.get_version.outputs.VERSION }}}}_{target_name}_output
+          name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_output
           path: gluon/output
 """
 
-output = ACTIONS_HEAD
+targets = [target.strip() for target in sys.stdin]
 
-for target in sys.stdin:
-	output += ACTIONS_TARGET.format(target_name=target.strip())
+
+output = ACTIONS.format(matrix=", ".join(targets))
 
 print(output)
