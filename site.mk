@@ -4,8 +4,7 @@ GLUON_FEATURES := \
     ebtables-filter-ra-dhcp \
     ebtables-limit-arp \
     mesh-batman-adv-15 \
-    mesh-vpn-fastd \
-    web-mesh-vpn-fastd \
+    mesh-vpn-wireguard \
     radv-filterd \
     respondd \
     status-page \
