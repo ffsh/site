@@ -13,7 +13,7 @@ export GLUON_TARGET=$1
 export BUILD_LOG=1
 
 # needed for manifest and actually the autoupdater
-export GLUON_BRANCH="stable"
+export GLUON_BRANCH="wireguard"
 export GLUON_PRIORITY=0
 
 cd gluon/
