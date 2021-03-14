@@ -13,9 +13,11 @@ export BUILD_LOG=1
 
 cd gluon/
 
+make dirclean
+
 make update
 
-make -j1 V=s GLUON_TARGET=ar71xx-generic
+make -j12 V=s GLUON_TARGET=ar71xx-generic
 
 #for TARGET in $(make list-targets); do
 #    make -j1 V=s GLUON_TARGET=$TARGET
