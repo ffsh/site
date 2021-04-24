@@ -5,8 +5,8 @@ on:
       types: [published]
 
 jobs:
-  release:
-    name: Create release archive
+  download_and_release:
+    name: "Create release archive"
     runs-on: ubuntu-latest
     environment: release
     steps:
