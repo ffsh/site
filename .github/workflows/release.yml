@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           repository: ffsh/firmware-collector
-      - name: Checkout
       - name: Install python deps
         run: pip3 install -r requirements.txt
       - name: Run automation steps
