@@ -23,7 +23,7 @@ jobs:
           ./automation.py --store
           ./automation.py --manifest ${{ github.ref }} --branch testing
           ./automation.py --manifest ${{ github.ref }} --branch rc
-        with:
+        env:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
           ffsh_secret: ${{ secrets.ffsh_secret }}
