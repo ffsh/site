@@ -1,23 +1,42 @@
 name: Create new release
-on: workflow_dispatch
+
+on:
+  release:
+      types: [published]
+
 jobs:
   release:
-    name: Download release
+    name: Create release archive
     runs-on: ubuntu-latest
     environment: release
     steps:
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - uses: actions/checkout@v2
         with:
           repository: ffsh/firmware-collector
       - name: Checkout
       - name: Install python deps
         run: pip3 install -r requirements.txt
-      - name: Update DB
-        run: ./cli.py --update
-      - name: Download files
-        run: ./cli.py --download ${{ steps.get_version.outputs.VERSION }}
-      - name: Store files
-        run: ./cli.py --
+      - name: Run automation steps
+        run: |
+          ./automation.py --update
+          ./automation.py --download ${{ github.ref }}
+          ./automation.py --store
+          ./automation.py --manifest ${{ github.ref }} --branch testing
+          ./automation.py --manifest ${{ github.ref }} --branch rc
+        with:
+          ffsh_url: ${{ secrets.ffsh_url }}
+          ffsh_username: ${{ secrets.ffsh_username }}
+          ffsh_secret: ${{ secrets.ffsh_secret }}
+      - name: create release archive
+        run: |
+          cd /tmp/ffsh/firmware_store/
+          tar cfz ${{ github.ref }}.tar.gz ${{ github.ref }}
+      - name: Upload release archive to release
+        uses: svenstaro/upload-release-action@483c1e56f95e88835747b1c7c60581215016cbf2
+        id: attach_to_release
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: /tmp/tmp/ffsh/firmware_store/${{ github.ref }}.tar.gz
+          asset_name: ${{ github.ref }}.tar.gz
+          tag: ${{ github.ref }}
+          overwrite: true
