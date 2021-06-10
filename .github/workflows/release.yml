@@ -18,11 +18,11 @@ jobs:
         run: pip3 install -r requirements.txt
       - name: Run automation steps
         run: |
-          ./automation.py --update
-          ./automation.py --download ${{ github.ref }}
-          ./automation.py --store
-          ./automation.py --manifest ${{ github.ref }} --branch testing
-          ./automation.py --manifest ${{ github.ref }} --branch rc
+          python3 ./automation.py --update
+          python3 ./automation.py --download ${{ github.ref }}
+          python3 ./automation.py --store
+          python3 ./automation.py --manifest ${{ github.ref }} --branch testing
+          python3 ./automation.py --manifest ${{ github.ref }} --branch rc
         env:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
