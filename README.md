@@ -6,7 +6,10 @@ In diesem Repository wird die Gluon Konfiguration für Freifunk Südholstein gep
 
 Für einen Überblick über die Änderungen kannst du unseren [Blog](https://freifunk-suedholstein.de) besuchen.
 
-
+| Version  | Minimum Vorraussetzung | Kommentar                  |
+|----------|------------------------|----------------------------|
+| 2021.1.0 | 2018.2                 | unter 2018.2 -> 2020.2.3.0 |
+|          |                        |                            |
 
 ## Firmware selber bauen:
 
