@@ -13,3 +13,20 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 Für das bauen der Firmware kannst du das ./actions/run-build-local.sh Script verwenden, wenn du alle Abhängigkeiten installiert hast.
 Das script konnte bisher allerdings nicht erfolgreich getestet werden.
 
+### Mit Docker
+
+Falls du schon mal in der vergangenheit einen Build erstellt hast löscht du am besten einfach die gluon dir.
+```
+rm -rf gluon
+```
+Und checkst das submodule frisch aus.
+
+```
+git submodule update --init
+```
+Schaue dir vor dem build noch mal `actions/run-build-local.sh` an, ob es deinen Bedürfnissen entspricht.
+
+```
+docker build .
+docker run --mount type=bind,source=$(pwd),target=/gluon gluon
+```
