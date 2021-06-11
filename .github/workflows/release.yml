@@ -14,15 +14,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ffsh/firmware-collector
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Install python deps
         run: pip3 install -r requirements.txt
       - name: Run automation steps
         run: |
           python3 ./automation.py --update
-          python3 ./automation.py --download ${{ github.ref }}
+          python3 ./automation.py --download ${{ steps.get_version.outputs.VERSION }}
           python3 ./automation.py --store
-          python3 ./automation.py --manifest ${{ github.ref }} --branch testing
-          python3 ./automation.py --manifest ${{ github.ref }} --branch rc
+          python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch testing
+          python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch rc
         env:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
@@ -30,13 +33,13 @@ jobs:
       - name: create release archive
         run: |
           cd /tmp/ffsh/firmware_store/
-          tar cfz ${{ github.ref }}.tar.gz ${{ github.ref }}
+          tar cfz ${{ steps.get_version.outputs.VERSION }}.tar.gz ${{ steps.get_version.outputs.VERSION }}
       - name: Upload release archive to release
         uses: svenstaro/upload-release-action@483c1e56f95e88835747b1c7c60581215016cbf2
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /tmp/tmp/ffsh/firmware_store/${{ github.ref }}.tar.gz
-          asset_name: ${{ github.ref }}.tar.gz
-          tag: ${{ github.ref }}
+          file: /tmp/tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}.tar.gz
+          asset_name: ${{ steps.get_version.outputs.VERSION }}.tar.gz
+          tag: ${{ steps.get_version.outputs.VERSION }}
           overwrite: true
