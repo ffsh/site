@@ -30,6 +30,6 @@ git submodule update --init
 Schaue dir vor dem build noch mal `actions/run-build-local.sh` an, ob es deinen Bedürfnissen entspricht.
 
 ```
-docker build .
+docker build . --tag gluon
 docker run --mount type=bind,source=$(pwd),target=/gluon gluon
 ```
