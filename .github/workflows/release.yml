@@ -39,7 +39,7 @@ jobs:
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /tmp/tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}.tar.gz
+          file: /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}.tar.gz
           asset_name: ${{ steps.get_version.outputs.VERSION }}.tar.gz
           tag: ${{ steps.get_version.outputs.VERSION }}
           overwrite: true
