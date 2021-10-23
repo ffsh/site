@@ -14,11 +14,13 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 ## Firmware selber bauen:
 
 Für das bauen der Firmware kannst du das ./actions/run-build-local.sh Script verwenden, wenn du alle Abhängigkeiten installiert hast.
-Das script konnte bisher allerdings nicht erfolgreich getestet werden.
+Passe das script an deinen eigenen Bedarf an.
 
 ### Mit Docker
 
-Falls du schon mal in der vergangenheit einen Build erstellt hast löscht du am besten einfach die gluon dir.
+Mit Docker brauchst du die Abhängigkeiten nicht selber installieren und der Build wird sich nicht an irgendwelchen Abhängigkeiten aufhängen.
+
+Falls du schon mal in der Vergangenheit einen Build erstellt hast, löscht du am besten einfach das gluon Verzeichniss.
 ```
 rm -rf gluon
 ```
