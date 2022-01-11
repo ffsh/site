@@ -22,12 +22,13 @@ jobs:
         target: [{matrix}]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${{GITHUB_REF/refs\/tags\//}}
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
       - name: Install Dependencies
         run: sudo actions/install-dependencies.sh
       - name: Build
