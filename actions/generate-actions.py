@@ -12,8 +12,6 @@ on:
     tags:
       - 2020.*
       - 2021.*
-  pull_request:
-    types: [opened, synchronize, reopened]
 jobs:
   build_firmware:
     strategy:
