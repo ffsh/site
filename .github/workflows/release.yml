@@ -30,11 +30,15 @@ jobs:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
           ffsh_secret: ${{ secrets.ffsh_secret }}
+      - name: sign manifests
+        run:|
+          python3 ./create_secret.py ${{ secrets.ffsh_key }} /tmp/secret_key
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/rc.manifest
+          echo "0000000000000000000000000000000000000000000000000000000000000" > /tmp/secret_key
       - name: create release archive
         run: |
-          ./sign.sh ${{ secrets.ffsh_key }} /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
-          ./sign.sh ${{ secrets.ffsh_key }} /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
-          ./sign.sh ${{ secrets.ffsh_key }} /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/rc.manifest
           cd /tmp/ffsh/firmware_store/
           tar cfz ${{ steps.get_version.outputs.VERSION }}.tar.gz ${{ steps.get_version.outputs.VERSION }}
       - name: Upload release archive to release
