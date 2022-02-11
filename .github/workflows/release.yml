@@ -31,7 +31,7 @@ jobs:
           ffsh_username: ${{ secrets.ffsh_username }}
           ffsh_secret: ${{ secrets.ffsh_secret }}
       - name: sign manifests
-        run:|
+        run: |
           python3 ./create_secret.py ${{ secrets.ffsh_key }} /tmp/secret_key
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
