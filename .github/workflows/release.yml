@@ -32,11 +32,13 @@ jobs:
           ffsh_secret: ${{ secrets.ffsh_secret }}
       - name: sign manifests
         run: |
-          python3 ./create_secret.py ${{ secrets.ffsh_key }} /tmp/secret_key
+          python3 ./create_secret.py ffsh_key /tmp/secret_key
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/rc.manifest
           echo "0000000000000000000000000000000000000000000000000000000000000" > /tmp/secret_key
+        env:
+          ffsh_key: ${{ secrets.ffsh_key }}
       - name: create release archive
         run: |
           cd /tmp/ffsh/firmware_store/
