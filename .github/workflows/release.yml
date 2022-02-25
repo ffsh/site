@@ -32,8 +32,8 @@ jobs:
           ffsh_secret: ${{ secrets.ffsh_secret }}
       - name: sign manifests
         run: |
-          apt-get -y update
-          apt-get -y install ecdsautils
+          sudo apt-get -y update
+          sudo apt-get -y install ecdsautils
           python3 ./create_secret.py ffsh_key /tmp/secret_key
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
           ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
