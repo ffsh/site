@@ -6,6 +6,7 @@ GLUON_FEATURES := \
     mesh-batman-adv-15 \
     mesh-vpn-fastd \
     web-mesh-vpn-fastd \
+    mesh-vpn-fastd-l2tp \
     radv-filterd \
     respondd \
     status-page \

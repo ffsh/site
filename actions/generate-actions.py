@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Get the version
@@ -33,12 +33,12 @@ jobs:
         run: actions/run-build.sh ${{{{matrix.target}}}}
       - name: Archive build logs
         if: ${{{{ !cancelled() }}}}
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_logs
           path: gluon/openwrt/logs
       - name: Archive build output
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_output
           path: gluon/output
