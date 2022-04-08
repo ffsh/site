@@ -8,6 +8,7 @@ on:
     tags:
       - 2020.*
       - 2021.*
+      - 2022.*
 jobs:
   build_firmware:
     strategy:
