@@ -12,6 +12,7 @@ on:
     tags:
       - 2020.*
       - 2021.*
+      - 2022.*
 jobs:
   build_firmware:
     strategy:
@@ -31,17 +32,17 @@ jobs:
         run: sudo actions/install-dependencies.sh
       - name: Build
         run: actions/run-build.sh ${{{{matrix.target}}}}
-      - name: Archive build logs
-        if: ${{{{ !cancelled() }}}}
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_logs
-          path: gluon/openwrt/logs
       - name: Archive build output
         uses: actions/upload-artifact@v3
         with:
           name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_output
           path: gluon/output
+      # - name: Archive build logs
+      #   if: ${{{{ !cancelled() }}}}
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_logs
+      #     path: gluon/openwrt/logs
 """
 
 targets = [target.strip() for target in sys.stdin]
