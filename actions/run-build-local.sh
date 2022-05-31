@@ -3,7 +3,7 @@
 set -e
 
 # Change this to give your build a different version
-export GLUON_RELEASE=2022.0.0.5
+export GLUON_RELEASE=2022.0.0.6
 
 # Don't change these
 export BROKEN=0
