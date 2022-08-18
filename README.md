@@ -12,7 +12,7 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 |          |                        |                            |
 
 ## Automation
-Public key von actions: c344a75809e3e869667dd1844f8074a2803217c079bcb8dc60e0914a440a7531
+Public key von actions: 7af457e2719e7a6c0882acc7ff4f7613af0baaa7fd5aab9728a443a1fd07418e
 
 ## Firmware selber bauen:
 
