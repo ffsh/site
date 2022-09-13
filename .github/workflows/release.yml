@@ -19,11 +19,26 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Install python deps
         run: pip3 install -r requirements.txt
-      - name: Run automation steps
+      - name: Initalize the internal DB
+        run: python3 ./automation.py --update
+        env:
+          ffsh_url: ${{ secrets.ffsh_url }}
+          ffsh_username: ${{ secrets.ffsh_username }}
+          ffsh_secret: ${{ secrets.ffsh_secret }}
+      - name: Download the Artifacts
+        run: python3 ./automation.py --download ${{ steps.get_version.outputs.VERSION }}
+        env:
+          ffsh_url: ${{ secrets.ffsh_url }}
+          ffsh_username: ${{ secrets.ffsh_username }}
+          ffsh_secret: ${{ secrets.ffsh_secret }}
+      - name: Unpack the Artifacts
+        run: python3 ./automation.py --store
+        env:
+          ffsh_url: ${{ secrets.ffsh_url }}
+          ffsh_username: ${{ secrets.ffsh_username }}
+          ffsh_secret: ${{ secrets.ffsh_secret }}
+      - name: Generate Manifests
         run: |
-          python3 ./automation.py --update
-          python3 ./automation.py --download ${{ steps.get_version.outputs.VERSION }}
-          python3 ./automation.py --store
           python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch testing
           python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch rc
         env:
