@@ -10,9 +10,9 @@ name: Build Gluon
 on:
   push:
     tags:
-      - 2020.*
       - 2021.*
       - 2022.*
+      - 2023.*
 jobs:
   build_firmware:
     strategy:
@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+          fetch-depth: 0
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${{GITHUB_REF/refs\/tags\//}}
