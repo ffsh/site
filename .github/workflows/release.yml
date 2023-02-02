@@ -61,7 +61,7 @@ jobs:
           cd /tmp/ffsh/firmware_store/
           tar cfz ${{ steps.get_version.outputs.VERSION }}.tar.gz ${{ steps.get_version.outputs.VERSION }}
       - name: Upload release archive to release
-        uses: svenstaro/upload-release-action@2728235f7dc9ff598bd86ce3c274b74f802d2208
+        uses: svenstaro/upload-release-action@cc92c9093e5f785e23a3d654fe2671640b851b5f
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
