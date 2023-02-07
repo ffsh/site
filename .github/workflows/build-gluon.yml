@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo "{VERSION}={${GITHUB_REF/refs\/tags\//}}" >> $GITHUB_OUTPUT
       - name: Install Dependencies
         run: sudo actions/install-dependencies.sh
       - name: Build
