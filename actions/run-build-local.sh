@@ -12,10 +12,14 @@ export GLUON_DEPRECATED=upgrade
 export GLUON_SITEDIR="../"
 export BUILD_LOG=1
 
+# Optional
+# export GLUON_AUTOUPDATER_BRANCH=stable
+# export GLUON_AUTOUPDATER_ENABLED=1
+
 cd gluon/
 
 # Optional dirclean can help to fix certain build issues, rm -rf gluon, is more effective in my mind
-#make dirclean
+# make dirclean
 
 # Updates the dependencies of gluon
 make update
