@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Get the version
         id: get_version
-        run: echo "{VERSION}={${GITHUB_REF/refs\/tags\//}}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
       - name: Install Dependencies
         run: sudo actions/install-dependencies.sh
       - name: Build
@@ -36,14 +36,8 @@ jobs:
       - name: Archive build output
         uses: actions/upload-artifact@v3
         with:
-          name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_output
+          name: ${{ env.VERSION }}_${{matrix.target}}_output
           path: gluon/output
-      # - name: Archive build logs
-      #   if: ${{{{ !cancelled() }}}}
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{{{ steps.get_version.outputs.VERSION }}}}_${{{{matrix.target}}}}_logs
-      #     path: gluon/openwrt/logs
 """
 
 targets = [target.strip() for target in sys.stdin]
