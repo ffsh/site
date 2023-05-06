@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Get the version
         id: get_version
-        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+        run: echo "VERSION=${{GITHUB_REF/refs\/tags\//}}" >> $GITHUB_ENV
       - name: Install Dependencies
         run: sudo actions/install-dependencies.sh
       - name: Build
@@ -36,7 +36,7 @@ jobs:
       - name: Archive build output
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.VERSION }}_${{matrix.target}}_output
+          name: ${{{{ env.VERSION }}}}_${{{{matrix.target}}}}_output
           path: gluon/output
 """
 
