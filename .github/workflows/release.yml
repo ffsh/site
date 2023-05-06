@@ -16,7 +16,7 @@ jobs:
           repository: ffsh/firmware-collector
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
       - name: Install python deps
         run: pip3 install -r requirements.txt
       - name: Initalize the internal DB
@@ -26,7 +26,7 @@ jobs:
           ffsh_username: ${{ secrets.ffsh_username }}
           ffsh_secret: ${{ secrets.ffsh_secret }}
       - name: Download the Artifacts
-        run: python3 ./automation.py --download ${{ steps.get_version.outputs.VERSION }}
+        run: python3 ./automation.py --download ${{ env.VERSION }}
         env:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
@@ -39,8 +39,8 @@ jobs:
           ffsh_secret: ${{ secrets.ffsh_secret }}
       - name: Generate Manifests
         run: |
-          python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch testing
-          python3 ./automation.py --manifest ${{ steps.get_version.outputs.VERSION }} --branch rc
+          python3 ./automation.py --manifest ${{ env.VERSION }} --branch testing
+          python3 ./automation.py --manifest ${{ env.VERSION }} --branch rc
         env:
           ffsh_url: ${{ secrets.ffsh_url }}
           ffsh_username: ${{ secrets.ffsh_username }}
@@ -50,22 +50,22 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install ecdsautils
           python3 ./create_secret.py ffsh_key /tmp/secret_key
-          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/stable.manifest
-          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/testing.manifest
-          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}/sysupgrade/rc.manifest
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ env.VERSION }}/sysupgrade/stable.manifest
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ env.VERSION }}/sysupgrade/testing.manifest
+          ./sign.sh /tmp/secret_key /tmp/ffsh/firmware_store/${{ env.VERSION }}/sysupgrade/rc.manifest
           echo "0000000000000000000000000000000000000000000000000000000000000" > /tmp/secret_key
         env:
           ffsh_key: ${{ secrets.ffsh_key }}
       - name: create release archive
         run: |
           cd /tmp/ffsh/firmware_store/
-          tar cfz ${{ steps.get_version.outputs.VERSION }}.tar.gz ${{ steps.get_version.outputs.VERSION }}
+          tar cfz ${{ env.VERSION }}.tar.gz ${{ env.VERSION }}
       - name: Upload release archive to release
         uses: svenstaro/upload-release-action@7319e4733ec7a184d739a6f412c40ffc339b69c7
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /tmp/ffsh/firmware_store/${{ steps.get_version.outputs.VERSION }}.tar.gz
-          asset_name: ${{ steps.get_version.outputs.VERSION }}.tar.gz
-          tag: ${{ steps.get_version.outputs.VERSION }}
+          file: /tmp/ffsh/firmware_store/${{ env.VERSION }}.tar.gz
+          asset_name: ${{ env.VERSION }}.tar.gz
+          tag: ${{ env.VERSION }}
           overwrite: true

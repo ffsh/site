@@ -2,7 +2,7 @@
 
 set -e
 
-export GLUON_RELEASE=2023.0.0.0
+export GLUON_RELEASE=2022.1.3.1
 
 
 export BROKEN=0
@@ -13,7 +13,8 @@ export GLUON_TARGET=$1
 export BUILD_LOG=1
 
 # needed for manifest and actually the autoupdater
-export GLUON_BRANCH="stable"
+export GLUON_AUTOUPDATER_BRANCH=stable
+export GLUON_AUTOUPDATER_ENABLED=1
 export GLUON_PRIORITY=0
 
 cd gluon/
