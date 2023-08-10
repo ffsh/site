@@ -3,7 +3,7 @@
 set -e
 
 # Change this to give your build a different version
-export GLUON_RELEASE=2022.1.3.1
+export GLUON_RELEASE=2022.1.0.0
 
 # Don't change these
 export BROKEN=0
@@ -26,7 +26,7 @@ make update
 
 # adjust -j to build with more cores
 # adjust GLUON_TARGET to build a different Target
-make -j1 V=s GLUON_TARGET=ath79-generic
+make -j12 V=s GLUON_TARGET=ath79-generic
 
 #for TARGET in $(make list-targets); do
 #    make -j1 V=s GLUON_TARGET=$TARGET
