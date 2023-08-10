@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     file \
     git \
-    subversion \
     python3 \
     build-essential \
     gawk \
@@ -22,7 +21,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ecdsautils \
     lua-check \
     shellcheck \
-  && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /tmp/ec &&\
+    wget -O /tmp/ec/ec-linux-amd64.tar.gz https://github.com/editorconfig-checker/editorconfig-checker/releases/download/2.7.0/ec-linux-amd64.tar.gz &&\
+    tar -xvzf /tmp/ec/ec-linux-amd64.tar.gz &&\
+    mv bin/ec-linux-amd64 /usr/local/bin/editorconfig-checker &&\
+    rm -rf /tmp/ec
 
 RUN useradd -d /gluon gluon
 USER gluon
