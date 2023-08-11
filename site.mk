@@ -15,9 +15,14 @@ GLUON_FEATURES := \
     web-private-wifi \
     config-mode-domain-select
 
+# For standard devices excluding tiny devices
+GLUON_FEATURES_standard := \
+    web-cellular \
+
 GLUON_SITE_PACKAGES := \
     iwinfo \
 
+# For standard devices excluding tiny devices
 GLUON_SITE_PACKAGES_standard := \
     respondd-module-airtime \
 

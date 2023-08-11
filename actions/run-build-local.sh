@@ -25,8 +25,9 @@ cd gluon/
 make update
 
 # adjust -j to build with more cores
+# V=s increases the output, useful for debugging
 # adjust GLUON_TARGET to build a different Target
-make -j12 V=s GLUON_TARGET=ath79-generic
+make -j12 GLUON_TARGET=ath79-generic
 
 #for TARGET in $(make list-targets); do
 #    make -j1 V=s GLUON_TARGET=$TARGET
