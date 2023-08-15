@@ -59,13 +59,16 @@ jobs:
       - name: create release archive
         run: |
           cd /tmp/ffsh/firmware_store/
-          tar cfz ${{ env.VERSION }}.tar.gz ${{ env.VERSION }}
+          tar cfz ${{ env.VERSION }}-factory.tar.gz ${{ env.VERSION }}/factory
+          tar cfz ${{ env.VERSION }}-other.tar.gz ${{ env.VERSION }}/other
+          tar cfz ${{ env.VERSION }}-sysupgrade.tar.gz ${{ env.VERSION }}/sysupgrade
       - name: Upload release archive to release
         uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /tmp/ffsh/firmware_store/${{ env.VERSION }}.tar.gz
+          file: /tmp/ffsh/firmware_store/*.tar.gz
           asset_name: ${{ env.VERSION }}.tar.gz
           tag: ${{ env.VERSION }}
           overwrite: true
+          file_glob: true
