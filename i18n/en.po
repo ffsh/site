@@ -22,9 +22,9 @@ msgid "gluon-config-mode:domain-select"
 msgstr ""
 "Here you have the possibility of selecting the mesh domain in which your node "
 "is placed. Your router will still connect to nodes from other domains. "
-"This setting will only change the SSID. "
-"Freifunk Südholstein -> Freifunk-Suedholstein.de "
-"Freifunk Stormarn -> stormarn.freifunk.net "
+"This setting will only change the SSID, the Name of the WLAN. <br>"
+"Freifunk Südholstein -> Freifunk-Suedholstein.de <br>"
+"Freifunk Stormarn -> stormarn.freifunk.net <br>"
 "Freifunk Lauenburg -> lauenburg.freifunk.net"
 
 
