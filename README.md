@@ -36,9 +36,32 @@ Und checkst das submodule frisch aus.
 git submodule update --init
 ```
 Schaue dir vor dem build noch mal `actions/run-build-local.sh` an, ob es deinen Bedürfnissen entspricht.
-Dann baust du den Container neu und startest den build von gluon.
+
+#### Docker installieren
+Es gibt verschiedene Möglichkeiten Docker zu installieren.
+Vermutlich kannst du es mit deiner Linux distribution einfach über den Paketmanager installieren, such einfach nach "docker".
+
+Unter Linux wird für gewöhnlich eine docker Gruppe angelegt, wenn du deinen user der docker Gruppe hinzufügst brauchst du docker nicht immer mit root-rechten ausführen.
+
+`sudo usermod -aG docker $USER`
+
+Weitere Informationen: https://docs.docker.com/engine/install/
+
+Alternativ auch gut für Windows mit WSL2: https://rancherdesktop.io/
+
+Docker benötigt in neuen versionen zusätzlich buildx um Images zu bauen.
+Das muss extra installiert werden.
+
+
+#### Image bauen und ausführen
+
+Der erste befehl baut das image und vergibt den namen "gluon" das dauert ein bisschen, denn es müssen ein paar Abhängigkeiten installiert werden.
+
+Du musst das image nicht jedes mal neu bauen. Du kannst den ersten Befehl also auch weg lassen wenn dein image nicht zu alt ist und du bereits eins hast.
+
+Mit `docker image ls` kannst du prüfen ob du schon ein gluon image hast und wie alt es ist.
 
 ```
-docker build . --tag gluon
+docker buildx build . --tag gluon
 docker run --mount type=bind,source=$(pwd),target=/gluon gluon
 ```
