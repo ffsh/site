@@ -20,5 +20,6 @@ export GLUON_PRIORITY=0
 cd gluon/
 
 make update
-make -j2
+# https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
+make -j4
 make manifest
