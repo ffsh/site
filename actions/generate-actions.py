@@ -2,7 +2,7 @@
 
 import sys
 
-ACTIONS = """
+ACTIONS = r"""
 # Update this file after adding/removing/renaming a target by running the script from gluon dir
 # `make list-targets BROKEN=0 GLUON_DEPRECATED=upgrade GLUON_SITEDIR="../"| ../actions/generate-actions.py > ../.github/workflows/build-gluon.yml`
 
