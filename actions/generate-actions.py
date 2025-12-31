@@ -13,6 +13,7 @@ on:
       - 2021.*
       - 2022.*
       - 2023.*
+      - 2025.*
 jobs:
   build_firmware:
     strategy:
