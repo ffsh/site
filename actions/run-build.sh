@@ -20,6 +20,14 @@ export GLUON_PRIORITY=0
 cd gluon/
 
 make update
-# https://github.blog/2024-01-17-github-hosted-runners-double-the-power-for-open-source/
-make -j4
+
+# Check if target should be built in debug mode
+if [ -f ../debug_targets.txt ] && grep -qx "$GLUON_TARGET" ../debug_targets.txt; then
+    # Debug mode: single job with verbose output
+    make GLUON_TARGET="$GLUON_TARGET" -j1 V=s
+else
+    # Normal mode: parallel build with nproc
+    make GLUON_TARGET="$GLUON_TARGET" -j"$(nproc)"
+fi
+
 make manifest
