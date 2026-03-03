@@ -12,6 +12,7 @@ Für einen Überblick über die Änderungen kannst du unseren [Blog](https://fre
 | 2022.1.0.0 | 2020.1                 |                            |
 | 2023.1.0.0 | 2021.1.2.2             |                            |
 | 2023.2.0.0 | 2022.1.4.0             |                            |
+| 2025.1.0.0 | 2022.1.4.0             |                            |
 
 https://archiv.firmware.freifunk-suedholstein.de/
 
