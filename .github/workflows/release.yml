@@ -62,11 +62,9 @@ jobs:
           tar cfz ${{ env.VERSION }}.tar.gz ${{ env.VERSION }}
           split -b 1800M ${{ env.VERSION }}.tar.gz "${{ env.VERSION }}.tar.gz.part"
       - name: Upload release archive to release
-        uses: svenstaro/upload-release-action@6b7fa9f267e90b50a19fef07b3596790bb941741
-        id: attach_to_release
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: /tmp/ffsh/firmware_store/${{ env.VERSION }}.tar.gz.part*
-          tag: ${{ env.VERSION }}
-          overwrite: true
-          file_glob: true
+        run: |
+          for file in /tmp/ffsh/firmware_store/${{ env.VERSION }}.tar.gz.part*; do
+            gh release upload ${{ env.VERSION }} "$file" --clobber
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
