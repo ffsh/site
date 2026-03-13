@@ -64,7 +64,7 @@ jobs:
       - name: Upload release archive to release
         run: |
           for file in /tmp/ffsh/firmware_store/${{ env.VERSION }}.tar.gz.part*; do
-            gh release upload ${{ env.VERSION }} "$file" --clobber
+            gh release upload ${{ env.VERSION }} "$file" --clobber --repo ${{ github.repository }}
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
