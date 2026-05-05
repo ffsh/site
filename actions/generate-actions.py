@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: actions/run-build.sh ${{{{matrix.target}}}}
       - name: Archive build output
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{{{ env.VERSION }}}}_${{{{matrix.target}}}}_output
           path: gluon/output
